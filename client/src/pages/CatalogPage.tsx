@@ -170,17 +170,43 @@ const CatalogPage: React.FC = () => {
       {/* Информационный блок */}
       {motorType === 'refurbished' && (
         <Paper elevation={1} sx={{ p: 3, mt: 4 }}>
-          <Typography variant="h5" gutterBottom fontWeight="bold">О восстановленных двигателях</Typography>
-          <Typography variant="body1" paragraph>
-            Восстановленные двигатели проходят полный цикл капитального ремонта с заменой всех изношенных деталей. 
-            Мы предоставляем гарантию на все восстановленные моторы.
+          <Typography variant="h5" gutterBottom fontWeight="bold">Собственная сборка двигателей ЗМЗ/УМЗ</Typography>
+          <Typography variant="subtitle1" gutterBottom fontWeight="medium">
+            Коммерческое предложение по восстановленным двигателям для организаций с автопарком ГАЗ/УАЗ.
           </Typography>
-          <Typography variant="h6" gutterBottom fontWeight="bold">Преимущества восстановленных двигателей:</Typography>
+          <Typography variant="body2" paragraph>
+            000 "СПЕКТР"<br />
+            ОГРН: 1217400012840<br />
+            ИНН/КПП:7456047921/745601001<br />
+            Фактический адрес: Московская область, г. Подольск, Проезд авиаторов 12с2
+          </Typography>
+
+          <Typography variant="h6" gutterBottom fontWeight="bold">О КОМПАНИИ</Typography>
+          <Typography variant="body1" paragraph>
+            — Мы узконаправленная организация, которая работает в нише «Обслуживания коммерческого 
+            транспорта» предлагая ассортимент восстановленных ЗМЗ/УМЗ двигателей.<br />
+            — С 2017 года мы успешно занимаемся восстановлением и сборкой двигателей, обретая 
+            репутацию надежного партнера в отрасли. В 2024 году 366 клиентов убедились в этом.
+          </Typography>
+          
+          <Typography variant="body1" paragraph>
+            ООО «Спектр» — это надежный партнер для всех, кто ценит качество, прозрачность и 
+            индивидуальный подход в обслуживании своих автомобилей. Мы всегда готовы предложить 
+            лучшие решения для наших клиентов!
+          </Typography>
+
+          <Typography variant="h6" gutterBottom fontWeight="bold">Преимущества сотрудничества:</Typography>
           <ul>
-            <li>Экономия до 50% по сравнению с новыми</li>
-            <li>Гарантия 12 месяцев</li>
-            <li>Полная диагностика и тестирование</li>
-            <li>Замена всех изношенных компонентов</li>
+            <li><strong>ГИБКИЕ ВАРИАНТЫ</strong> - Сдайте старый - получите восстановленный.</li>
+            <li><strong>СОКРАЩЕНИЕ ВРЕМЕНИ</strong> - Избегайте простоя, двигателя всегда в наличие.</li>
+            <li><strong>ПОД КЛЮЧ</strong> - Через 24 часа автомобиль уже будет в строю.</li>
+          </ul>
+
+          <Typography variant="h6" gutterBottom fontWeight="bold">Выгоды для вас:</Typography>
+          <ul>
+            <li><strong>УДОБСТВО</strong> - Мы - ваш цех по обслуживанию моторов</li>
+            <li><strong>ЭКОНОМИЯ ВРЕМЕНИ</strong> - Сокращаем время простоя автомобиля</li>
+            <li><strong>НАДЕЖНОСТЬ</strong> - Предоставляем гарантию на двигатели</li>
           </ul>
         </Paper>
       )}
