@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Box,
-  Grid,
   Typography,
   Breadcrumbs,
   Link,
@@ -24,7 +23,6 @@ import { useQuery } from 'react-query';
 import { NavigateNext as NavigateNextIcon } from '@mui/icons-material';
 
 import ProductGrid from '../components/products/ProductGrid';
-import ProductFilter from '../components/products/ProductFilter';
 import { motorService } from '../services/api';
 
 const CatalogPage: React.FC = () => {
@@ -35,8 +33,6 @@ const CatalogPage: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
 
   // Параметры фильтров из URL
-  const categoryParam = queryParams.get('category') || '';
-  const manufacturerParam = queryParams.get('manufacturer') || '';
   const searchQuery = queryParams.get('search') || '';
   const sortParam = queryParams.get('sort') || 'price_asc';
   const pageParam = parseInt(queryParams.get('page') || '1');
@@ -47,25 +43,11 @@ const CatalogPage: React.FC = () => {
   const [sortBy, setSortBy] = useState(sortParam);
   const [motorType, setMotorType] = useState(typeParam);
   
-  // Запрос категорий
-  const { data: categoriesData, isLoading: categoriesLoading } = useQuery(
-    'categories',
-    motorService.getMotorCategories
-  );
-
-  // Запрос производителей
-  const { data: manufacturersData, isLoading: manufacturersLoading } = useQuery(
-    'manufacturers',
-    motorService.getMotorManufacturers
-  );
-
   // Формирование параметров запроса моторов
   const getQueryVariables = () => {
     return {
       page: currentPage,
       keyword: searchQuery || undefined,
-      category: categoryParam || undefined,
-      manufacturer: manufacturerParam || undefined,
       sortBy: sortBy,
       type: motorType !== 'all' ? motorType : undefined
     };
@@ -85,8 +67,6 @@ const CatalogPage: React.FC = () => {
   useEffect(() => {
     const params = new URLSearchParams();
     
-    if (categoryParam) params.set('category', categoryParam);
-    if (manufacturerParam) params.set('manufacturer', manufacturerParam);
     if (searchQuery) params.set('search', searchQuery);
     params.set('sort', sortBy);
     if (currentPage > 1) params.set('page', currentPage.toString());
@@ -94,8 +74,6 @@ const CatalogPage: React.FC = () => {
     
     navigate(`/catalog?${params.toString()}`, { replace: true });
   }, [
-    categoryParam,
-    manufacturerParam,
     sortBy,
     currentPage,
     searchQuery,
@@ -112,30 +90,6 @@ const CatalogPage: React.FC = () => {
   const handleMotorTypeChange = (event: React.SyntheticEvent, newValue: string) => {
     setMotorType(newValue);
     setCurrentPage(1); // Сброс на первую страницу при изменении типа
-  };
-
-  // Обработчик применения фильтров
-  const handleFilterChange = (filters: any) => {
-    const params = new URLSearchParams(location.search);
-    
-    // Обновление параметров фильтрации
-    if (filters.categories.length > 0) {
-      params.set('category', filters.categories[0]);
-    } else {
-      params.delete('category');
-    }
-    
-    if (filters.manufacturers.length > 0) {
-      params.set('manufacturer', filters.manufacturers[0]);
-    } else {
-      params.delete('manufacturer');
-    }
-    
-    // Сброс на первую страницу
-    params.delete('page');
-    setCurrentPage(1);
-    
-    navigate(`/catalog?${params.toString()}`);
   };
 
   // Обработчик изменения страницы
@@ -155,11 +109,6 @@ const CatalogPage: React.FC = () => {
           Главная
         </Link>
         <Typography color="text.primary">Каталог</Typography>
-        {categoryParam && !categoriesLoading && categoriesData && (
-          <Typography color="text.primary">
-            {categoriesData.find((cat: any) => cat._id === categoryParam)?.name || 'Категория'}
-          </Typography>
-        )}
       </Breadcrumbs>
 
       {/* Заголовок */}
@@ -172,9 +121,7 @@ const CatalogPage: React.FC = () => {
       >
         {searchQuery
           ? `Результаты поиска: ${searchQuery}`
-          : categoryParam && !categoriesLoading && categoriesData
-            ? categoriesData.find((cat: any) => cat._id === categoryParam)?.name || 'Каталог двигателей'
-            : 'Каталог двигателей'}
+          : 'Каталог двигателей'}
       </Typography>
 
       {/* Табы для типов двигателей */}
@@ -195,49 +142,30 @@ const CatalogPage: React.FC = () => {
         <Divider />
       </Box>
 
-      {/* Фильтры и сортировка */}
-      <Grid container spacing={3}>
-        {/* Фильтры */}
-        <Grid item xs={12} md={3}>
-          <Paper elevation={1} sx={{ p: 2, mb: 3 }}>
-            <ProductFilter
-              categories={categoriesLoading ? [] : (categoriesData || [])}
-              manufacturers={manufacturersLoading ? [] : (manufacturersData || [])}
-              onFilterChange={handleFilterChange}
-              initialValues={{
-                categories: categoryParam ? [categoryParam] : [],
-                manufacturers: manufacturerParam ? [manufacturerParam] : [],
-                sortBy: sortBy,
-              }}
-            />
-          </Paper>
-        </Grid>
+      {/* Сортировка и товары */}
+      <Box sx={{ mb: 3 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+          <FormControl size="small" sx={{ minWidth: 200 }}>
+            <InputLabel>Сортировка</InputLabel>
+            <Select value={sortBy} onChange={handleSortChange} label="Сортировка">
+              <MenuItem value="price_asc">Сначала дешевле</MenuItem>
+              <MenuItem value="price_desc">Сначала дороже</MenuItem>
+              <MenuItem value="rating_desc">По рейтингу</MenuItem>
+              <MenuItem value="createdAt_desc">Сначала новые</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
 
-        {/* Сортировка и товары */}
-        <Grid item xs={12} md={9}>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-            <FormControl size="small" sx={{ minWidth: 200 }}>
-              <InputLabel>Сортировка</InputLabel>
-              <Select value={sortBy} onChange={handleSortChange} label="Сортировка">
-                <MenuItem value="price_asc">Сначала дешевле</MenuItem>
-                <MenuItem value="price_desc">Сначала дороже</MenuItem>
-                <MenuItem value="rating_desc">По рейтингу</MenuItem>
-                <MenuItem value="createdAt_desc">Сначала новые</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>
-
-          {/* Товары */}
-          <ProductGrid
-            products={motorsLoading ? [] : (motorsData?.motors || [])}
-            loading={motorsLoading}
-            error={motorsError}
-            totalPages={motorsData?.totalPages || 1}
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-          />
-        </Grid>
-      </Grid>
+        {/* Товары */}
+        <ProductGrid
+          products={motorsLoading ? [] : (motorsData?.motors || [])}
+          loading={motorsLoading}
+          error={motorsError}
+          totalPages={motorsData?.totalPages || 1}
+          currentPage={currentPage}
+          onPageChange={handlePageChange}
+        />
+      </Box>
 
       {/* Информационный блок */}
       {motorType === 'refurbished' && (
