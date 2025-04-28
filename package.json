@@ -1,16 +1,14 @@
 {
   "name": "motors-shop",
   "version": "1.0.0",
-  "description": "Интернет-магазин моторов",
-  "main": "index.js",
+  "description": "Motors Shop Application",
+  "main": "server/dist/server.js",
   "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd server && npm start",
+    "start": "node server/dist/server.js",
+    "build": "cd server && npm install && npm run build && cd ../client && npm install && npm run build",
+    "server": "cd server && npm run dev",
     "client": "cd client && npm start",
-    "dev": "concurrently \"cd server && npm run dev\" \"cd client && npm start\"",
-    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
-    "build": "cd client && npm run build",
-    "deploy": "cd client && npm run build && cd ../server && npm start"
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "keywords": [
     "motors",
@@ -19,7 +17,10 @@
   ],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "concurrently": "^8.2.0"
+  "dependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   }
 } 

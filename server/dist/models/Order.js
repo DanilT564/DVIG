@@ -40,9 +40,19 @@ const orderSchema = new mongoose_1.Schema({
         required: true,
         ref: 'User',
     },
+    orderNumber: {
+        type: String,
+        required: true,
+        unique: true,
+    },
     orderItems: [
         {
             motor: {
+                type: mongoose_1.Schema.Types.ObjectId,
+                required: true,
+                ref: 'Motor',
+            },
+            product: {
                 type: mongoose_1.Schema.Types.ObjectId,
                 required: true,
                 ref: 'Motor',
@@ -89,6 +99,16 @@ const orderSchema = new mongoose_1.Schema({
     },
     deliveredAt: {
         type: Date,
+    },
+    status: {
+        type: String,
+        required: true,
+        enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
+        default: 'pending',
+    },
+    isRefunded: {
+        type: Boolean,
+        default: false,
     },
 }, {
     timestamps: true,

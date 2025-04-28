@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getMotorManufacturers = exports.getMotorBrands = exports.getMotorCategories = exports.getMotorsByBrand = exports.getMotorsByCategory = exports.getTopMotors = exports.createMotorReview = exports.updateMotor = exports.createMotor = exports.deleteMotor = exports.getMotorById = exports.getMotors = void 0;
 const express_async_handler_1 = __importDefault(require("express-async-handler"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const Motor_1 = __importDefault(require("../models/Motor"));
 const getMotors = (0, express_async_handler_1.default)(async (req, res) => {
     const pageSize = 10;
@@ -89,9 +90,12 @@ const deleteMotor = (0, express_async_handler_1.default)(async (req, res) => {
 });
 exports.deleteMotor = deleteMotor;
 const createMotor = (0, express_async_handler_1.default)(async (req, res) => {
-    var _a;
+    if (!req.user) {
+        res.status(401);
+        throw new Error('Not authorized');
+    }
     const motor = new Motor_1.default({
-        user: (_a = req.user) === null || _a === void 0 ? void 0 : _a._id,
+        user: req.user._id,
         name: 'Sample Motor',
         price: 0,
         image: '/images/sample.jpg',
@@ -150,32 +154,33 @@ const updateMotor = (0, express_async_handler_1.default)(async (req, res) => {
 });
 exports.updateMotor = updateMotor;
 const createMotorReview = (0, express_async_handler_1.default)(async (req, res) => {
-    var _a, _b;
     const { rating, comment } = req.body;
+    if (!req.user) {
+        res.status(401);
+        throw new Error('Not authorized');
+    }
     const motor = await Motor_1.default.findById(req.params.id);
     if (motor) {
         const alreadyReviewed = motor.reviews.find((r) => { var _a; return r.user.toString() === ((_a = req.user) === null || _a === void 0 ? void 0 : _a._id.toString()); });
         if (alreadyReviewed) {
             res.status(400);
-            throw new Error('Motor already reviewed');
+            throw new Error('Вы уже оставили отзыв на этот товар');
         }
         const review = {
-            name: ((_a = req.user) === null || _a === void 0 ? void 0 : _a.name) || 'Anonymous',
+            name: req.user.name || 'Anonymous',
             rating: Number(rating),
             comment,
-            user: (_b = req.user) === null || _b === void 0 ? void 0 : _b._id,
+            user: new mongoose_1.default.Types.ObjectId(req.user._id),
         };
         motor.reviews.push(review);
         motor.numReviews = motor.reviews.length;
-        motor.rating =
-            motor.reviews.reduce((acc, item) => acc + item.rating, 0) /
-                motor.reviews.length;
+        motor.rating = motor.calculateAverageRating();
         await motor.save();
-        res.status(201).json({ message: 'Review added' });
+        res.status(201).json({ message: 'Отзыв добавлен' });
     }
     else {
         res.status(404);
-        throw new Error('Motor not found');
+        throw new Error('Товар не найден');
     }
 });
 exports.createMotorReview = createMotorReview;
