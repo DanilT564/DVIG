@@ -1,0 +1,24 @@
+{
+  "name": "motors-shop",
+  "version": "1.0.0",
+  "description": "Интернет-магазин моторов",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd server && npm start",
+    "client": "cd client && npm start",
+    "install-all": "npm install && cd client && npm install && cd ../server && npm install",
+    "build": "cd client && npm run build",
+    "deploy": "cd client && npm run build && cd ../server && npm start"
+  },
+  "keywords": [
+    "motors",
+    "ecommerce",
+    "shop"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  }
+} 
