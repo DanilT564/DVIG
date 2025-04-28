@@ -33,7 +33,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-frontend-url.render.com'] // Change this to your actual frontend URL
+    ? '*' // Разрешаем доступ с любого домена в продакшн режиме
     : 'http://localhost:3000',
   credentials: true
 }));
@@ -68,9 +68,10 @@ if (process.env.NODE_ENV === 'production') {
 app.use(notFound);
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+// Ensure PORT is recognized by Render
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
 

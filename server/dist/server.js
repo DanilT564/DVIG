@@ -28,7 +28,7 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cors_1.default)({
     origin: process.env.NODE_ENV === 'production'
-        ? ['https://your-frontend-url.render.com']
+        ? '*'
         : 'http://localhost:3000',
     credentials: true
 }));
@@ -53,8 +53,8 @@ else {
 }
 app.use(errorMiddleware_1.notFound);
 app.use(errorMiddleware_1.errorHandler);
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 5000;
+app.listen(PORT, '0.0.0.0', () => {
     console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
 });
 exports.default = app;
