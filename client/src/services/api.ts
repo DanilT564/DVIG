@@ -53,6 +53,12 @@ export interface Motor {
   features: string[];
   createdAt: string;
   updatedAt: string;
+  // Новые поля для соответствия дизайну motors774
+  isNew?: boolean;
+  isRefurbished?: boolean;
+  model?: string;
+  volume?: number; // объем двигателя в литрах
+  year?: number; // год выпуска
 }
 
 export interface Review {

@@ -14,6 +14,9 @@ import {
   MenuItem,
   SelectChangeEvent,
   useMediaQuery,
+  Tab,
+  Tabs,
+  Divider,
 } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
@@ -41,10 +44,12 @@ const CatalogPage: React.FC = () => {
   const maxPowerParam = parseInt(queryParams.get('maxPower') || '1000');
   const sortParam = queryParams.get('sort') || 'price_asc';
   const pageParam = parseInt(queryParams.get('page') || '1');
+  const typeParam = queryParams.get('type') || 'all';
 
   // Состояние для фильтров
   const [currentPage, setCurrentPage] = useState(pageParam);
   const [sortBy, setSortBy] = useState(sortParam);
+  const [motorType, setMotorType] = useState(typeParam);
   
   // Запрос категорий
   const { data: categoriesData, isLoading: categoriesLoading } = useQuery(
@@ -69,7 +74,8 @@ const CatalogPage: React.FC = () => {
       maxPrice: maxPriceParam !== 1000000 ? maxPriceParam : undefined,
       minPower: minPowerParam || undefined,
       maxPower: maxPowerParam !== 1000 ? maxPowerParam : undefined,
-      sortBy: sortBy
+      sortBy: sortBy,
+      type: motorType !== 'all' ? motorType : undefined
     };
   };
 
@@ -96,6 +102,7 @@ const CatalogPage: React.FC = () => {
     if (maxPowerParam < 1000) params.set('maxPower', maxPowerParam.toString());
     params.set('sort', sortBy);
     if (currentPage > 1) params.set('page', currentPage.toString());
+    if (motorType !== 'all') params.set('type', motorType);
     
     navigate(`/catalog?${params.toString()}`, { replace: true });
   }, [
@@ -108,12 +115,19 @@ const CatalogPage: React.FC = () => {
     sortBy,
     currentPage,
     searchQuery,
+    motorType,
   ]);
 
   // Обработчик изменения сортировки
   const handleSortChange = (event: SelectChangeEvent) => {
     setSortBy(event.target.value);
     setCurrentPage(1); // Сброс на первую страницу при изменении сортировки
+  };
+
+  // Обработчик изменения типа мотора
+  const handleMotorTypeChange = (event: React.SyntheticEvent, newValue: string) => {
+    setMotorType(newValue);
+    setCurrentPage(1); // Сброс на первую страницу при изменении типа
   };
 
   // Обработчик применения фильтров
@@ -156,7 +170,7 @@ const CatalogPage: React.FC = () => {
       <Breadcrumbs
         separator={<NavigateNextIcon fontSize="small" />}
         aria-label="breadcrumb"
-        sx={{ mb: 3 }}
+        sx={{ my: 2 }}
       >
         <Link component={RouterLink} to="/" color="inherit">
           Главная
@@ -169,32 +183,44 @@ const CatalogPage: React.FC = () => {
         )}
       </Breadcrumbs>
 
-      {/* Заголовок и сортировка */}
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3, flexWrap: 'wrap' }}>
-        <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
-          {searchQuery
-            ? `Результаты поиска: ${searchQuery}`
-            : categoryParam && !categoriesLoading && categoriesData
-              ? categoriesData.find((cat: any) => cat._id === categoryParam)?.name || 'Каталог моторов'
-              : 'Каталог моторов'}
-        </Typography>
+      {/* Заголовок */}
+      <Typography 
+        variant="h4" 
+        component="h1" 
+        gutterBottom 
+        fontWeight="bold"
+        sx={{ mb: 3 }}
+      >
+        {searchQuery
+          ? `Результаты поиска: ${searchQuery}`
+          : categoryParam && !categoriesLoading && categoriesData
+            ? categoriesData.find((cat: any) => cat._id === categoryParam)?.name || 'Каталог двигателей'
+            : 'Каталог двигателей'}
+      </Typography>
 
-        <FormControl size="small" sx={{ minWidth: 200 }}>
-          <InputLabel>Сортировка</InputLabel>
-          <Select value={sortBy} onChange={handleSortChange} label="Сортировка">
-            <MenuItem value="price_asc">Сначала дешевле</MenuItem>
-            <MenuItem value="price_desc">Сначала дороже</MenuItem>
-            <MenuItem value="rating_desc">По рейтингу</MenuItem>
-            <MenuItem value="createdAt_desc">Сначала новые</MenuItem>
-          </Select>
-        </FormControl>
+      {/* Табы для типов двигателей */}
+      <Box sx={{ width: '100%', mb: 4 }}>
+        <Tabs
+          value={motorType}
+          onChange={handleMotorTypeChange}
+          textColor="primary"
+          indicatorColor="primary"
+          aria-label="motor types tabs"
+          sx={{ mb: 2 }}
+        >
+          <Tab value="all" label="Все двигатели" />
+          <Tab value="refurbished" label="Восстановленные двигатели" />
+          <Tab value="new" label="Новые двигатели" />
+          <Tab value="used" label="Контрактные двигатели" />
+        </Tabs>
+        <Divider />
       </Box>
 
-      {/* Фильтры и товары */}
+      {/* Фильтры и сортировка */}
       <Grid container spacing={3}>
         {/* Фильтры */}
         <Grid item xs={12} md={3}>
-          <Paper elevation={1} sx={{ p: 2 }}>
+          <Paper elevation={1} sx={{ p: 2, mb: 3 }}>
             <ProductFilter
               minPrice={0}
               maxPrice={1000000}
@@ -214,8 +240,21 @@ const CatalogPage: React.FC = () => {
           </Paper>
         </Grid>
 
-        {/* Товары */}
+        {/* Сортировка и товары */}
         <Grid item xs={12} md={9}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
+            <FormControl size="small" sx={{ minWidth: 200 }}>
+              <InputLabel>Сортировка</InputLabel>
+              <Select value={sortBy} onChange={handleSortChange} label="Сортировка">
+                <MenuItem value="price_asc">Сначала дешевле</MenuItem>
+                <MenuItem value="price_desc">Сначала дороже</MenuItem>
+                <MenuItem value="rating_desc">По рейтингу</MenuItem>
+                <MenuItem value="createdAt_desc">Сначала новые</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+          {/* Товары */}
           <ProductGrid
             products={motorsLoading ? [] : (motorsData?.motors || [])}
             loading={motorsLoading}
@@ -226,6 +265,24 @@ const CatalogPage: React.FC = () => {
           />
         </Grid>
       </Grid>
+
+      {/* Информационный блок */}
+      {motorType === 'refurbished' && (
+        <Paper elevation={1} sx={{ p: 3, mt: 4 }}>
+          <Typography variant="h5" gutterBottom fontWeight="bold">О восстановленных двигателях</Typography>
+          <Typography variant="body1" paragraph>
+            Восстановленные двигатели проходят полный цикл капитального ремонта с заменой всех изношенных деталей. 
+            Мы предоставляем гарантию на все восстановленные моторы.
+          </Typography>
+          <Typography variant="h6" gutterBottom fontWeight="bold">Преимущества восстановленных двигателей:</Typography>
+          <ul>
+            <li>Экономия до 50% по сравнению с новыми</li>
+            <li>Гарантия 12 месяцев</li>
+            <li>Полная диагностика и тестирование</li>
+            <li>Замена всех изношенных компонентов</li>
+          </ul>
+        </Paper>
+      )}
     </Container>
   );
 };

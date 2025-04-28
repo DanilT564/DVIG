@@ -3,20 +3,26 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#0066cc', // Основной синий цвет
+      main: '#0064cd', // Синий цвет, как на референсе
       light: '#4d8fe0',
-      dark: '#004999',
+      dark: '#004c99',
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#4caf50', // Светло-зеленый цвет
-      light: '#80e27e',
-      dark: '#087f23',
+      main: '#e53935', // Красный цвет для акцентов
+      light: '#ff6f60',
+      dark: '#ab000d',
       contrastText: '#ffffff',
     },
     background: {
-      default: '#f5f5f5',
+      default: '#f8f8f8',
       paper: '#ffffff',
+    },
+    error: {
+      main: '#d32f2f',
+    },
+    success: {
+      main: '#388e3c',
     },
   },
   typography: {
@@ -58,17 +64,20 @@ const theme = createTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          borderRadius: 4,
           padding: '8px 16px',
+          boxShadow: 'none',
         },
         containedPrimary: {
           '&:hover': {
-            backgroundColor: '#004999',
+            backgroundColor: '#004c99',
+            boxShadow: 'none',
           },
         },
         containedSecondary: {
           '&:hover': {
-            backgroundColor: '#087f23',
+            backgroundColor: '#ab000d',
+            boxShadow: 'none',
           },
         },
       },
@@ -76,22 +85,27 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
-          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+          borderRadius: 4,
+          boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
+          transition: 'transform 0.2s, box-shadow 0.2s',
+          '&:hover': {
+            transform: 'translateY(-4px)',
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+          }
         },
       },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+          boxShadow: '0 1px 0 rgba(0, 0, 0, 0.1)',
         },
       },
     },
     MuiIconButton: {
       styleOverrides: {
         root: {
-          borderRadius: 8,
+          borderRadius: 4,
         },
       },
     },
@@ -99,6 +113,28 @@ const theme = createTheme({
       styleOverrides: {
         paper: {
           backgroundColor: '#ffffff',
+        },
+      },
+    },
+    MuiBreadcrumbs: {
+      styleOverrides: {
+        root: {
+          marginBottom: '1.5rem',
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          borderRadius: 4,
+          fontWeight: 500,
+        },
+      },
+    },
+    MuiPaper: {
+      styleOverrides: {
+        root: {
+          borderRadius: 4,
         },
       },
     },

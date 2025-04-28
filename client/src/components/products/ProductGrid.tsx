@@ -1,64 +1,64 @@
 import React from 'react';
-import { Grid, Box, Typography, CircularProgress, Pagination } from '@mui/material';
+import { Grid, Box, Typography, Pagination, CircularProgress, Alert, Paper } from '@mui/material';
 import ProductCard from './ProductCard';
 import { Motor } from '../../services/api';
 
 interface ProductGridProps {
   products: Motor[];
   loading: boolean;
-  error: unknown;
-  totalPages?: number;
-  currentPage?: number;
-  onPageChange?: (page: number) => void;
+  error: any;
+  totalPages: number;
+  currentPage: number;
+  onPageChange: (page: number) => void;
 }
 
 const ProductGrid: React.FC<ProductGridProps> = ({
   products,
   loading,
   error,
-  totalPages = 1,
-  currentPage = 1,
+  totalPages,
+  currentPage,
   onPageChange,
 }) => {
+  // Обработчик изменения страницы
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
-    if (onPageChange) {
-      onPageChange(page);
-      // Прокрутка вверх страницы при смене страницы
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    onPageChange(page);
+    // Прокрутка страницы вверх при смене страницы
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Если загрузка
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 400 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', py: 8 }}>
         <CircularProgress />
       </Box>
     );
   }
 
+  // Если ошибка
   if (error) {
     return (
-      <Box sx={{ textAlign: 'center', py: 4 }}>
-        <Typography variant="h6" color="error">
-          Произошла ошибка при загрузке товаров
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Пожалуйста, попробуйте обновить страницу
-        </Typography>
-      </Box>
+      <Alert 
+        severity="error" 
+        sx={{ mb: 2 }}
+      >
+        Произошла ошибка при загрузке товаров. Пожалуйста, попробуйте обновить страницу.
+      </Alert>
     );
   }
 
+  // Если нет товаров
   if (products.length === 0) {
     return (
-      <Box sx={{ textAlign: 'center', py: 4 }}>
-        <Typography variant="h6" color="text.secondary">
-          Товары не найдены
+      <Paper elevation={0} sx={{ p: 4, textAlign: 'center', bgcolor: '#f8f8f8', borderRadius: 1 }}>
+        <Typography variant="h6" color="text.secondary" gutterBottom>
+          По вашему запросу ничего не найдено
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Попробуйте изменить параметры поиска
+        <Typography variant="body1" color="text.secondary">
+          Попробуйте изменить параметры фильтрации или поискать что-то другое
         </Typography>
-      </Box>
+      </Paper>
     );
   }
 
@@ -66,22 +66,23 @@ const ProductGrid: React.FC<ProductGridProps> = ({
     <Box>
       <Grid container spacing={3}>
         {products.map((product) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={product._id}>
+          <Grid item xs={12} sm={6} md={4} key={product._id}>
             <ProductCard product={product} />
           </Grid>
         ))}
       </Grid>
 
+      {/* Пагинация */}
       {totalPages > 1 && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 2 }}>
           <Pagination
             count={totalPages}
             page={currentPage}
             onChange={handlePageChange}
             color="primary"
+            size="large"
             showFirstButton
             showLastButton
-            shape="rounded"
           />
         </Box>
       )}

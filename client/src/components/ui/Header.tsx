@@ -18,6 +18,7 @@ import {
   ListItemText,
   Divider,
   Avatar,
+  ListItemIcon,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import {
@@ -25,6 +26,7 @@ import {
   AccountCircle as AccountCircleIcon,
   Search as SearchIcon,
   Menu as MenuIcon,
+  Phone as PhoneIcon,
 } from '@mui/icons-material';
 import { useAuth } from '../../hooks/useAuth';
 import { useCart } from '../../hooks/useCart';
@@ -88,7 +90,7 @@ const Header: React.FC = () => {
     >
       <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
-          Меню
+          МоторПрайм
         </Typography>
       </Box>
       <Divider />
@@ -141,7 +143,7 @@ const Header: React.FC = () => {
     <>
       <AppBar position="sticky" sx={{ bgcolor: 'primary.main' }}>
         <Container maxWidth="xl">
-          <Toolbar disableGutters>
+          <Toolbar disableGutters sx={{ minHeight: '64px' }}>
             {isMobile && (
               <IconButton
                 size="large"
@@ -169,7 +171,7 @@ const Header: React.FC = () => {
                 flexGrow: { xs: 1, md: 0 },
               }}
             >
-              MOTORS
+              МоторПрайм
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -182,6 +184,7 @@ const Header: React.FC = () => {
                     my: 2, 
                     color: 'white', 
                     display: 'block',
+                    mx: 1,
                     '&:hover': {
                       backgroundColor: 'primary.dark'
                     }
@@ -190,6 +193,14 @@ const Header: React.FC = () => {
                   {item.title}
                 </Button>
               ))}
+            </Box>
+
+            {/* Телефон для десктопа */}
+            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', mr: 2 }}>
+              <PhoneIcon sx={{ mr: 1 }} />
+              <Typography variant="body1" component="span" fontWeight="500">
+                8 (800) 123-45-67
+              </Typography>
             </Box>
 
             <Box sx={{ display: 'flex' }}>
@@ -258,28 +269,19 @@ const Header: React.FC = () => {
         </Container>
       </AppBar>
 
-      {/* Mobile Navigation Drawer */}
-      <Drawer anchor="left" open={mobileMenuOpen} onClose={toggleDrawer(false)}>
-        {mobileMenuDrawer}
-      </Drawer>
-
-      {/* Search Bar */}
-      {searchOpen && <SearchBar onClose={handleSearchToggle} />}
-
-      {/* User Profile Menu */}
+      {/* Выпадающее меню пользователя */}
       <Menu
         anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'right',
         }}
-        keepMounted
         transformOrigin={{
           vertical: 'top',
           horizontal: 'right',
         }}
-        open={Boolean(anchorEl)}
-        onClose={handleMenuClose}
       >
         <MenuItem component={RouterLink} to="/profile" onClick={handleMenuClose}>
           Профиль
@@ -288,13 +290,29 @@ const Header: React.FC = () => {
           Мои заказы
         </MenuItem>
         {isAdmin && (
-          <MenuItem component={RouterLink} to="/admin" onClick={handleMenuClose}>
+          <MenuItem component={RouterLink} to="/admin/dashboard" onClick={handleMenuClose}>
             Админ-панель
           </MenuItem>
         )}
         <Divider />
         <MenuItem onClick={handleLogout}>Выйти</MenuItem>
       </Menu>
+
+      {/* Мобильное меню */}
+      <Drawer
+        anchor="left"
+        open={mobileMenuOpen}
+        onClose={toggleDrawer(false)}
+      >
+        {mobileMenuDrawer}
+      </Drawer>
+
+      {/* Строка поиска */}
+      {searchOpen && (
+        <Box sx={{ width: '100%', padding: '1rem', bgcolor: 'background.paper', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+          <SearchBar onClose={handleSearchToggle} />
+        </Box>
+      )}
     </>
   );
 };
