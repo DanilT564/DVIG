@@ -38,10 +38,6 @@ const CatalogPage: React.FC = () => {
   const categoryParam = queryParams.get('category') || '';
   const manufacturerParam = queryParams.get('manufacturer') || '';
   const searchQuery = queryParams.get('search') || '';
-  const minPriceParam = parseInt(queryParams.get('minPrice') || '0');
-  const maxPriceParam = parseInt(queryParams.get('maxPrice') || '1000000');
-  const minPowerParam = parseInt(queryParams.get('minPower') || '0');
-  const maxPowerParam = parseInt(queryParams.get('maxPower') || '1000');
   const sortParam = queryParams.get('sort') || 'price_asc';
   const pageParam = parseInt(queryParams.get('page') || '1');
   const typeParam = queryParams.get('type') || 'all';
@@ -70,10 +66,6 @@ const CatalogPage: React.FC = () => {
       keyword: searchQuery || undefined,
       category: categoryParam || undefined,
       manufacturer: manufacturerParam || undefined,
-      minPrice: minPriceParam || undefined,
-      maxPrice: maxPriceParam !== 1000000 ? maxPriceParam : undefined,
-      minPower: minPowerParam || undefined,
-      maxPower: maxPowerParam !== 1000 ? maxPowerParam : undefined,
       sortBy: sortBy,
       type: motorType !== 'all' ? motorType : undefined
     };
@@ -96,10 +88,6 @@ const CatalogPage: React.FC = () => {
     if (categoryParam) params.set('category', categoryParam);
     if (manufacturerParam) params.set('manufacturer', manufacturerParam);
     if (searchQuery) params.set('search', searchQuery);
-    if (minPriceParam > 0) params.set('minPrice', minPriceParam.toString());
-    if (maxPriceParam < 1000000) params.set('maxPrice', maxPriceParam.toString());
-    if (minPowerParam > 0) params.set('minPower', minPowerParam.toString());
-    if (maxPowerParam < 1000) params.set('maxPower', maxPowerParam.toString());
     params.set('sort', sortBy);
     if (currentPage > 1) params.set('page', currentPage.toString());
     if (motorType !== 'all') params.set('type', motorType);
@@ -108,10 +96,6 @@ const CatalogPage: React.FC = () => {
   }, [
     categoryParam,
     manufacturerParam,
-    minPriceParam,
-    maxPriceParam,
-    minPowerParam,
-    maxPowerParam,
     sortBy,
     currentPage,
     searchQuery,
@@ -146,11 +130,6 @@ const CatalogPage: React.FC = () => {
     } else {
       params.delete('manufacturer');
     }
-    
-    params.set('minPrice', filters.priceRange[0].toString());
-    params.set('maxPrice', filters.priceRange[1].toString());
-    params.set('minPower', filters.power[0].toString());
-    params.set('maxPower', filters.power[1].toString());
     
     // Сброс на первую страницу
     params.delete('page');
@@ -222,16 +201,10 @@ const CatalogPage: React.FC = () => {
         <Grid item xs={12} md={3}>
           <Paper elevation={1} sx={{ p: 2, mb: 3 }}>
             <ProductFilter
-              minPrice={0}
-              maxPrice={1000000}
-              minPower={0}
-              maxPower={1000}
               categories={categoriesLoading ? [] : (categoriesData || [])}
               manufacturers={manufacturersLoading ? [] : (manufacturersData || [])}
               onFilterChange={handleFilterChange}
               initialValues={{
-                priceRange: [minPriceParam, maxPriceParam],
-                power: [minPowerParam, maxPowerParam],
                 categories: categoryParam ? [categoryParam] : [],
                 manufacturers: manufacturerParam ? [manufacturerParam] : [],
                 sortBy: sortBy,
