@@ -5,10 +5,11 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import App from './App';
-import { theme } from './theme';
-import { AuthProvider } from './contexts/AuthContext';
-import { CartProvider } from './contexts/CartContext';
+import theme from './theme';
+import { AuthProvider } from './hooks/useAuth';
+import { CartProvider } from './hooks/useCart';
 
+// Создание клиента для React Query
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -24,8 +25,8 @@ const root = ReactDOM.createRoot(
 
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <AuthProvider>
@@ -34,7 +35,7 @@ root.render(
             </CartProvider>
           </AuthProvider>
         </ThemeProvider>
-      </BrowserRouter>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   </React.StrictMode>
 ); 
