@@ -2,9 +2,9 @@
   "name": "motors-shop",
   "version": "1.0.0",
   "description": "Motors Shop Application",
-  "main": "server/dist/server.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node server/dist/server.js",
+    "start": "node index.js",
     "build": "cd server && npm install && npm run build && cd ../client && npm install && npm run build",
     "server": "cd server && npm run dev",
     "client": "cd client && npm start",
