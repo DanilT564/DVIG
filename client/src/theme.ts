@@ -1,6 +1,6 @@
 import { createTheme } from '@mui/material/styles';
 
-export const theme = createTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: '#0066cc', // Основной синий цвет
@@ -103,4 +103,6 @@ export const theme = createTheme({
       },
     },
   },
-}); 
+});
+
+export default theme; 

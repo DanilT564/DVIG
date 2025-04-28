@@ -6,8 +6,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import App from './App';
 import theme from './theme';
-import { AuthProvider } from './hooks/useAuth';
-import { CartProvider } from './hooks/useCart';
+import { AuthProvider } from './contexts/AuthContext';
+import { CartProvider } from './contexts/CartContext';
 
 // Создание клиента для React Query
 const queryClient = new QueryClient({

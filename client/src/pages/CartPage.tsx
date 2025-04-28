@@ -30,7 +30,7 @@ import { useCart } from '../hooks/useCart';
 import { useAuth } from '../hooks/useAuth';
 
 const CartPage: React.FC = () => {
-  const { items, totalPrice, removeFromCart, updateQuantity, clearCart } = useCart();
+  const { cart, total, totalItems, removeFromCart, updateQuantity, clearCart } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
@@ -87,7 +87,7 @@ const CartPage: React.FC = () => {
         </Typography>
       </Box>
 
-      {items.length === 0 ? (
+      {cart.length === 0 ? (
         <Paper elevation={1} sx={{ p: 4, textAlign: 'center' }}>
           <Typography variant="h6" gutterBottom>
             Ваша корзина пуста
@@ -122,14 +122,14 @@ const CartPage: React.FC = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {items.map((item) => (
-                      <TableRow key={item.id}>
+                    {cart.map((item: any) => (
+                      <TableRow key={item.product._id}>
                         <TableCell>
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Box
                               component="img"
-                              src={item.imageUrl || '/placeholder.jpg'}
-                              alt={item.name}
+                              src={item.product.image || '/placeholder.jpg'}
+                              alt={item.product.name}
                               sx={{
                                 width: 70,
                                 height: 70,
@@ -141,22 +141,22 @@ const CartPage: React.FC = () => {
                             />
                             <Link
                               component={RouterLink}
-                              to={`/product/${item.id}`}
+                              to={`/product/${item.product._id}`}
                               color="inherit"
                               sx={{ fontWeight: 'bold' }}
                             >
-                              {item.name}
+                              {item.product.name}
                             </Link>
                           </Box>
                         </TableCell>
                         <TableCell align="right">
-                          {item.price.toLocaleString()} ₽
+                          {item.product.price.toLocaleString()} ₽
                         </TableCell>
                         <TableCell align="center">
                           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <IconButton
                               size="small"
-                              onClick={() => handleDecreaseQuantity(item.id, item.quantity)}
+                              onClick={() => handleDecreaseQuantity(item.product._id, item.quantity)}
                             >
                               <RemoveIcon fontSize="small" />
                             </IconButton>
@@ -164,12 +164,12 @@ const CartPage: React.FC = () => {
                               size="small"
                               inputProps={{ style: { textAlign: 'center' } }}
                               value={item.quantity}
-                              onChange={(e) => handleQuantityChange(item.id, e.target.value)}
+                              onChange={(e) => handleQuantityChange(item.product._id, e.target.value)}
                               sx={{ width: 60, mx: 1 }}
                             />
                             <IconButton
                               size="small"
-                              onClick={() => handleIncreaseQuantity(item.id, item.quantity)}
+                              onClick={() => handleIncreaseQuantity(item.product._id, item.quantity)}
                             >
                               <AddIcon fontSize="small" />
                             </IconButton>
@@ -177,13 +177,13 @@ const CartPage: React.FC = () => {
                         </TableCell>
                         <TableCell align="right">
                           <Typography fontWeight="bold">
-                            {(item.price * item.quantity).toLocaleString()} ₽
+                            {(item.product.price * item.quantity).toLocaleString()} ₽
                           </Typography>
                         </TableCell>
                         <TableCell align="right">
                           <IconButton
                             color="error"
-                            onClick={() => removeFromCart(item.id)}
+                            onClick={() => removeFromCart(item.product._id)}
                           >
                             <DeleteIcon />
                           </IconButton>
@@ -221,8 +221,8 @@ const CartPage: React.FC = () => {
               <Divider sx={{ my: 2 }} />
               
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                <Typography>Товары ({items.length}):</Typography>
-                <Typography fontWeight="bold">{totalPrice.toLocaleString()} ₽</Typography>
+                <Typography>Товары ({totalItems}):</Typography>
+                <Typography fontWeight="bold">{total.toLocaleString()} ₽</Typography>
               </Box>
               
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
@@ -235,7 +235,7 @@ const CartPage: React.FC = () => {
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
                 <Typography variant="h6">К оплате:</Typography>
                 <Typography variant="h6" fontWeight="bold" color="primary">
-                  {totalPrice.toLocaleString()} ₽
+                  {total.toLocaleString()} ₽
                 </Typography>
               </Box>
               

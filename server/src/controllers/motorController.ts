@@ -9,7 +9,7 @@ interface ReviewInterface {
   name: string;
   rating: number;
   comment: string;
-  user: mongoose.Schema.Types.ObjectId;
+  user: mongoose.Types.ObjectId;
 }
 
 interface Dimensions {
@@ -42,6 +42,7 @@ interface MotorInterface extends mongoose.Document {
   yearOfManufacture: number;
   warranty: number;
   features: string[];
+  calculateAverageRating: () => number;
 }
 
 // Create a custom interface for authenticated requests
@@ -49,6 +50,7 @@ interface AuthRequest extends Request {
   user?: {
     _id: string | mongoose.Types.ObjectId;
     name?: string;
+    role?: string;
   };
 }
 
@@ -176,8 +178,13 @@ const deleteMotor = asyncHandler(async (req: AuthRequest, res: Response) => {
 // @route   POST /api/motors
 // @access  Private/Admin
 const createMotor = asyncHandler(async (req: AuthRequest, res: Response) => {
+  if (!req.user) {
+    res.status(401);
+    throw new Error('Not authorized');
+  }
+
   const motor = new Motor({
-    user: req.user?._id,
+    user: req.user._id,
     name: 'Sample Motor',
     price: 0,
     image: '/images/sample.jpg',
@@ -257,38 +264,40 @@ const updateMotor = asyncHandler(async (req: AuthRequest, res: Response) => {
 const createMotorReview = asyncHandler(async (req: AuthRequest, res: Response) => {
   const { rating, comment } = req.body;
 
-  const motor = await Motor.findById(req.params.id);
+  if (!req.user) {
+    res.status(401);
+    throw new Error('Not authorized');
+  }
+
+  const motor = await Motor.findById(req.params.id) as MotorInterface;
 
   if (motor) {
+    // Проверяем, оставлял ли уже этот пользователь отзыв
     const alreadyReviewed = motor.reviews.find(
       (r) => r.user.toString() === req.user?._id.toString()
     );
 
     if (alreadyReviewed) {
       res.status(400);
-      throw new Error('Motor already reviewed');
+      throw new Error('Вы уже оставили отзыв на этот товар');
     }
 
-    const review: ReviewInterface = {
-      name: req.user?.name || 'Anonymous',
+    const review = {
+      name: req.user.name || 'Anonymous',
       rating: Number(rating),
       comment,
-      user: req.user?._id as unknown as mongoose.Schema.Types.ObjectId,
+      user: new mongoose.Types.ObjectId(req.user._id),
     };
 
-    motor.reviews.push(review);
-
+    motor.reviews.push(review as ReviewInterface);
     motor.numReviews = motor.reviews.length;
-
-    motor.rating =
-      motor.reviews.reduce((acc, item) => acc + item.rating, 0) /
-      motor.reviews.length;
+    motor.rating = motor.calculateAverageRating();
 
     await motor.save();
-    res.status(201).json({ message: 'Review added' });
+    res.status(201).json({ message: 'Отзыв добавлен' });
   } else {
     res.status(404);
-    throw new Error('Motor not found');
+    throw new Error('Товар не найден');
   }
 });
 

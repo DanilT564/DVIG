@@ -118,11 +118,12 @@ const ProductPage: React.FC = () => {
   const handleAddToCart = () => {
     if (motor) {
       addToCart({
-        id: motor._id,
+        _id: motor._id,
         name: motor.name,
         price: motor.price,
-        imageUrl: motor.image,
-      });
+        image: motor.image || motor.images[0] || '/placeholder.jpg',
+        countInStock: motor.countInStock
+      }, 1);
       setSnackbarMessage('Товар добавлен в корзину');
       setSnackbarSeverity('success');
       setSnackbarOpen(true);
@@ -395,7 +396,7 @@ const ProductPage: React.FC = () => {
                       </TableCell>
                       <TableCell>
                         <ul style={{ paddingLeft: 16, margin: 0 }}>
-                          {motor.features.map((feature, index) => (
+                          {motor.features.map((feature: string, index: number) => (
                             <li key={index}>{feature}</li>
                           ))}
                         </ul>
@@ -411,7 +412,7 @@ const ProductPage: React.FC = () => {
           <TabPanel value={tabValue} index={1}>
             {motor.reviews.length > 0 ? (
               <Box>
-                {motor.reviews.map((review) => (
+                {motor.reviews.map((review: any) => (
                   <Card key={review._id} sx={{ mb: 2 }}>
                     <CardContent>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>

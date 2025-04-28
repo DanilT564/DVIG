@@ -27,11 +27,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     e.preventDefault();
     e.stopPropagation();
     addToCart({
-      id: product._id,
+      _id: product._id,
       name: product.name,
+      image: product.images[0] || '/placeholder.jpg',
       price: product.price,
-      imageUrl: product.images[0] || '/placeholder.jpg',
-    });
+      countInStock: product.countInStock
+    }, 1);
   };
 
   const isNew = () => {
@@ -80,7 +81,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
               }}
             />
           )}
-          {product.stock <= 0 && (
+          {product.countInStock <= 0 && (
             <Chip
               label="Нет в наличии"
               color="error"
@@ -130,7 +131,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           startIcon={<ShoppingCartIcon />}
           onClick={handleAddToCart}
           fullWidth
-          disabled={product.stock <= 0}
+          disabled={product.countInStock <= 0}
           sx={{
             bgcolor: 'secondary.main',
             '&:hover': {

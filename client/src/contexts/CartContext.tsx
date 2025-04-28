@@ -1,110 +1,131 @@
-import React, { createContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Типы
-export interface CartItem {
-  id: string;
+// Типы для товаров в корзине
+interface Product {
+  _id: string;
   name: string;
+  image: string;
   price: number;
-  imageUrl: string;
+  countInStock: number;
+}
+
+interface CartItem {
+  product: Product;
   quantity: number;
 }
 
 interface CartContextType {
-  items: CartItem[];
-  totalItems: number;
-  totalPrice: number;
-  addToCart: (item: Omit<CartItem, 'quantity'>) => void;
-  removeFromCart: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  cart: CartItem[];
+  addToCart: (product: Product, quantity: number) => void;
+  removeFromCart: (productId: string) => void;
+  updateQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
+  total: number;
+  totalItems: number;
 }
 
-interface CartProviderProps {
-  children: ReactNode;
-}
+const CartContext = createContext<CartContextType | undefined>(undefined);
 
-// Создание контекста
-export const CartContext = createContext<CartContextType>({
-  items: [],
-  totalItems: 0,
-  totalPrice: 0,
-  addToCart: () => {},
-  removeFromCart: () => {},
-  updateQuantity: () => {},
-  clearCart: () => {},
-});
+export const useCart = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCart must be used within a CartProvider');
+  }
+  return context;
+};
 
-export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-  const [items, setItems] = useState<CartItem[]>(() => {
+export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [cart, setCart] = useState<CartItem[]>([]);
+  const [total, setTotal] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+
+  // Загрузка корзины из localStorage при инициализации
+  useEffect(() => {
     const savedCart = localStorage.getItem('cart');
-    return savedCart ? JSON.parse(savedCart) : [];
-  });
+    if (savedCart) {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        setCart(parsedCart);
+      } catch (error) {
+        console.error('Ошибка при загрузке корзины:', error);
+      }
+    }
+  }, []);
 
   // Сохранение корзины в localStorage при изменении
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(items));
-  }, [items]);
-
-  // Общее количество товаров
-  const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-
-  // Общая стоимость
-  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    // Пересчитываем общую сумму и количество товаров
+    const newTotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+    const newTotalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    
+    setTotal(newTotal);
+    setTotalItems(newTotalItems);
+  }, [cart]);
 
   // Добавление товара в корзину
-  const addToCart = (item: Omit<CartItem, 'quantity'>) => {
-    setItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
+  const addToCart = (product: Product, quantity: number) => {
+    setCart(prevCart => {
+      // Проверяем, есть ли уже такой товар в корзине
+      const existingItemIndex = prevCart.findIndex(item => item.product._id === product._id);
       
-      if (existingItem) {
-        // Увеличиваем количество существующего товара
-        return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
+      if (existingItemIndex !== -1) {
+        // Товар уже есть в корзине, обновляем количество
+        const updatedCart = [...prevCart];
+        const newQuantity = updatedCart[existingItemIndex].quantity + quantity;
+        
+        // Проверяем, не превышает ли новое количество доступное на складе
+        updatedCart[existingItemIndex].quantity = Math.min(newQuantity, product.countInStock);
+        
+        return updatedCart;
       } else {
-        // Добавляем новый товар
-        return [...prevItems, { ...item, quantity: 1 }];
+        // Товара нет в корзине, добавляем новый
+        return [...prevCart, { product, quantity: Math.min(quantity, product.countInStock) }];
       }
     });
   };
 
   // Удаление товара из корзины
-  const removeFromCart = (id: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  const removeFromCart = (productId: string) => {
+    setCart(prevCart => prevCart.filter(item => item.product._id !== productId));
   };
 
-  // Обновление количества товара
-  const updateQuantity = (id: string, quantity: number) => {
+  // Обновление количества товара в корзине
+  const updateQuantity = (productId: string, quantity: number) => {
     if (quantity <= 0) {
-      removeFromCart(id);
+      removeFromCart(productId);
       return;
     }
-
-    setItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity } : item
-      )
-    );
+    
+    setCart(prevCart => {
+      return prevCart.map(item => {
+        if (item.product._id === productId) {
+          // Проверяем, не превышает ли новое количество доступное на складе
+          const newQuantity = Math.min(quantity, item.product.countInStock);
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      });
+    });
   };
 
   // Очистка корзины
   const clearCart = () => {
-    setItems([]);
+    setCart([]);
   };
 
-  return (
-    <CartContext.Provider
-      value={{
-        items,
-        totalItems,
-        totalPrice,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        clearCart,
-      }}
-    >
-      {children}
-    </CartContext.Provider>
-  );
-}; 
+  const value = {
+    cart,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
+    total,
+    totalItems,
+  };
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+};
+
+export default CartContext; 

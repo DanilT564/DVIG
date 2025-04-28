@@ -2,6 +2,7 @@ import mongoose, { Document, Schema } from 'mongoose';
 
 interface OrderItem {
   motor: mongoose.Types.ObjectId;
+  product: mongoose.Types.ObjectId;
   name: string;
   image: string;
   price: number;
@@ -11,6 +12,7 @@ interface OrderItem {
 export interface IOrder extends Document {
   user: mongoose.Types.ObjectId;
   orderItems: OrderItem[];
+  orderNumber: string;
   shippingAddress: {
     address: string;
     city: string;
@@ -29,6 +31,8 @@ export interface IOrder extends Document {
   paidAt?: Date;
   isDelivered: boolean;
   deliveredAt?: Date;
+  status: string;
+  isRefunded?: boolean;
 }
 
 const orderSchema = new Schema<IOrder>(
@@ -38,9 +42,19 @@ const orderSchema = new Schema<IOrder>(
       required: true,
       ref: 'User',
     },
+    orderNumber: {
+      type: String,
+      required: true,
+      unique: true,
+    },
     orderItems: [
       {
         motor: {
+          type: Schema.Types.ObjectId,
+          required: true,
+          ref: 'Motor',
+        },
+        product: {
           type: Schema.Types.ObjectId,
           required: true,
           ref: 'Motor',
@@ -87,6 +101,16 @@ const orderSchema = new Schema<IOrder>(
     },
     deliveredAt: {
       type: Date,
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled'],
+      default: 'pending',
+    },
+    isRefunded: {
+      type: Boolean,
+      default: false,
     },
   },
   {
