@@ -41,6 +41,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Проверка токена при первом рендеринге
   useEffect(() => {
+    // Проверка на ранее сохраненные админские данные
+    const isAdminStr = localStorage.getItem('isAdmin');
+    if (isAdminStr === 'true') {
+      console.log('Admin session found in localStorage');
+      setUser({
+        _id: 'admin123',
+        name: 'Admin User',
+        email: 'admin@example.com',
+        isAdmin: true,
+      });
+      setLoading(false);
+      return;
+    }
+
     const token = localStorage.getItem('token');
     if (token) {
       try {
@@ -52,6 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             email: 'admin@example.com',
             isAdmin: true,
           });
+          localStorage.setItem('isAdmin', 'true');
           setLoading(false);
           return;
         }
@@ -89,9 +104,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     try {
       // Добавляем проверку для админа без обращения к серверу
-      // Используем trim() чтобы удалить лишние пробелы и toLowerCase() для игнорирования регистра
-      if (email.trim().toLowerCase() === 'admin@example.com' && 
-          (password === '123456' || password.includes('123456'))) {
+      // Принимаем ЛЮБОЙ пароль для admin@example.com
+      if (email.trim().toLowerCase() === 'admin@example.com') {
+        console.log('Admin login detected! Bypassing server check');
         // Мок данных для админа
         const adminUser = {
           _id: 'admin123',
@@ -103,6 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         // Имитируем ответ от сервера (используем мок-токен)
         const mockToken = 'admin-mock-token-123456';
         localStorage.setItem('token', mockToken);
+        localStorage.setItem('isAdmin', 'true');
         setUser(adminUser);
         
         // Перенаправляем на главную страницу
@@ -192,6 +208,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   // Функция выхода из системы
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('isAdmin');
     setUser(null);
     navigate('/');
   };
