@@ -90,7 +90,7 @@ const Header: React.FC = () => {
     >
       <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
-          МоторПрайм
+          СПЕКТР
         </Typography>
       </Box>
       <Divider />
@@ -141,7 +141,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <AppBar position="sticky" sx={{ bgcolor: 'primary.main' }}>
+      <AppBar position="sticky" sx={{ bgcolor: 'primary.main', zIndex: 1300 }}>
         <Container maxWidth="xl">
           <Toolbar disableGutters sx={{ minHeight: '64px' }}>
             {isMobile && (
@@ -171,7 +171,7 @@ const Header: React.FC = () => {
                 flexGrow: { xs: 1, md: 0 },
               }}
             >
-              МоторПрайм
+              СПЕКТР
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
@@ -199,7 +199,7 @@ const Header: React.FC = () => {
             <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', mr: 2 }}>
               <PhoneIcon sx={{ mr: 1 }} />
               <Typography variant="body1" component="span" fontWeight="500">
-                8 (800) 123-45-67
+                +7 (999) 123-45-67
               </Typography>
             </Box>
 
