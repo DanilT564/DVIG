@@ -28,10 +28,10 @@ const Footer: React.FC = () => {
       { title: 'Гарантия', path: '/warranty' },
     ],
     'Каталог': [
-      { title: 'Все моторы', path: '/catalog' },
-      { title: 'Электрические', path: '/catalog?category=electric' },
-      { title: 'Бензиновые', path: '/catalog?category=petrol' },
-      { title: 'Дизельные', path: '/catalog?category=diesel' },
+      { title: 'Все двигатели', path: '/catalog' },
+      { title: 'Двигатели ЗМЗ', path: '/catalog?type=zmz' },
+      { title: 'Двигатели УМЗ', path: '/catalog?type=umz' },
+      { title: 'Восстановленные', path: '/catalog?type=refurbished' },
     ],
     'Клиентам': [
       { title: 'Личный кабинет', path: '/profile' },
@@ -44,30 +44,30 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <Box component="footer" sx={{ bgcolor: 'primary.dark', color: 'white', mt: 'auto' }}>
+    <Box component="footer" sx={{ bgcolor: '#0a4b8e', color: 'white', mt: 'auto' }}>
       <Container maxWidth="xl" sx={{ py: 6 }}>
         <Grid container spacing={4}>
           {/* Информация о компании */}
           <Grid item xs={12} md={4}>
             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: 'bold' }}>
-              MOTORS
+              СПЕКТР
             </Typography>
             <Typography variant="body2" sx={{ mb: 2 }}>
-              Интернет-магазин качественных моторов для различных применений. 
-              Широкий выбор моделей по доступным ценам с доставкой по всей России.
+              Узконаправленная организация, которая работает в нише «Обслуживания коммерческого транспорта»,
+              предлагая ассортимент восстановленных ЗМЗ/УМЗ двигателей.
             </Typography>
             <Typography variant="body2" sx={{ mb: 2 }}>
               Телефон: +7 (999) 123-45-67
             </Typography>
             <Typography variant="body2">
-              Email: info@motors-shop.ru
+              Email: info@spectr-motors.ru
             </Typography>
           </Grid>
 
           {/* Ссылки */}
           {Object.entries(footerLinks).map(([title, links]) => (
             <Grid item xs={12} sm={6} md={2} key={title}>
-              <Typography variant="h6" gutterBottom>
+              <Typography variant="h6" gutterBottom fontWeight="bold">
                 {title}
               </Typography>
               <List dense>
@@ -80,6 +80,7 @@ const Footer: React.FC = () => {
                     sx={{ 
                       color: 'white',
                       textDecoration: 'none',
+                      transition: 'color 0.3s',
                       '&:hover': { 
                         color: 'secondary.light',
                       }
@@ -94,20 +95,48 @@ const Footer: React.FC = () => {
 
           {/* Социальные сети */}
           <Grid item xs={12} sm={12} md={2}>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom fontWeight="bold">
               Мы в соцсетях
             </Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>
-              <IconButton aria-label="facebook" sx={{ color: 'white' }}>
+              <IconButton 
+                aria-label="facebook" 
+                sx={{ 
+                  color: 'white',
+                  transition: 'color 0.3s',
+                  '&:hover': { color: 'secondary.main' } 
+                }}
+              >
                 <FacebookIcon />
               </IconButton>
-              <IconButton aria-label="instagram" sx={{ color: 'white' }}>
+              <IconButton 
+                aria-label="instagram" 
+                sx={{ 
+                  color: 'white',
+                  transition: 'color 0.3s',
+                  '&:hover': { color: 'secondary.main' } 
+                }}
+              >
                 <InstagramIcon />
               </IconButton>
-              <IconButton aria-label="youtube" sx={{ color: 'white' }}>
+              <IconButton 
+                aria-label="youtube" 
+                sx={{ 
+                  color: 'white',
+                  transition: 'color 0.3s',
+                  '&:hover': { color: 'secondary.main' } 
+                }}
+              >
                 <YouTubeIcon />
               </IconButton>
-              <IconButton aria-label="twitter" sx={{ color: 'white' }}>
+              <IconButton 
+                aria-label="twitter" 
+                sx={{ 
+                  color: 'white',
+                  transition: 'color 0.3s',
+                  '&:hover': { color: 'secondary.main' } 
+                }}
+              >
                 <TwitterIcon />
               </IconButton>
             </Box>
@@ -120,13 +149,31 @@ const Footer: React.FC = () => {
       <Container maxWidth="xl">
         <Box sx={{ py: 3, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'center', sm: 'flex-start' } }}>
           <Typography variant="body2" sx={{ mb: { xs: 1, sm: 0 } }}>
-            © {currentYear} Motors Shop. Все права защищены.
+            © {currentYear} ООО "СПЕКТР". Все права защищены.
           </Typography>
           <Box sx={{ display: 'flex', gap: 2 }}>
-            <Link component={RouterLink} to="/privacy" color="inherit" underline="hover">
+            <Link 
+              component={RouterLink} 
+              to="/privacy" 
+              color="inherit" 
+              underline="hover"
+              sx={{
+                transition: 'color 0.3s',
+                '&:hover': { color: 'secondary.light' }
+              }}
+            >
               Политика конфиденциальности
             </Link>
-            <Link component={RouterLink} to="/terms" color="inherit" underline="hover">
+            <Link 
+              component={RouterLink} 
+              to="/terms" 
+              color="inherit" 
+              underline="hover"
+              sx={{
+                transition: 'color 0.3s',
+                '&:hover': { color: 'secondary.light' }
+              }}
+            >
               Условия использования
             </Link>
           </Box>
