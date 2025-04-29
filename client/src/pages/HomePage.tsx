@@ -426,6 +426,38 @@ const HomePage: React.FC = () => {
           </Grid>
         </Grid>
       </Container>
+      
+      {/* Блок "Готовы подобрать идеальный двигатель" */}
+      <Box sx={{ bgcolor: 'primary.main', color: 'white', py: 4, mb: 4 }}>
+        <Container>
+          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box sx={{ mb: { xs: 3, md: 0 }, maxWidth: { xs: '100%', md: '60%' } }}>
+              <Typography variant="h4" component="h2" gutterBottom fontWeight="bold">
+                Готовы подобрать идеальный двигатель?
+              </Typography>
+              <Typography variant="body1">
+                Наши специалисты помогут вам выбрать оптимальный двигатель под ваши задачи.
+                Широкий выбор, профессиональная консультация и быстрая доставка!
+              </Typography>
+            </Box>
+            <Button 
+              component={RouterLink}
+              to="/catalog"
+              variant="contained" 
+              color="secondary" 
+              size="large"
+              sx={{ 
+                px: 4, 
+                py: 1.5, 
+                fontWeight: 'bold',
+                fontSize: '1.1rem'
+              }}
+            >
+              Перейти в каталог
+            </Button>
+          </Box>
+        </Container>
+      </Box>
     </Box>
   );
 };
