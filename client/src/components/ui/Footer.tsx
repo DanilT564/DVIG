@@ -21,23 +21,11 @@ import {
 
 const Footer: React.FC = () => {
   const footerLinks = {
-    'Информация': [
+    'Разделы сайта': [
+      { title: 'Главная', path: '/' },
       { title: 'О компании', path: '/about' },
-      { title: 'Доставка', path: '/delivery' },
-      { title: 'Оплата', path: '/payment' },
-      { title: 'Гарантия', path: '/warranty' },
-    ],
-    'Каталог': [
-      { title: 'Все двигатели', path: '/catalog' },
-      { title: 'Двигатели ЗМЗ', path: '/catalog?type=zmz' },
-      { title: 'Двигатели УМЗ', path: '/catalog?type=umz' },
-      { title: 'Восстановленные', path: '/catalog?type=refurbished' },
-    ],
-    'Клиентам': [
-      { title: 'Личный кабинет', path: '/profile' },
-      { title: 'Отследить заказ', path: '/orders' },
+      { title: 'Каталог двигателей', path: '/catalog' },
       { title: 'Контакты', path: '/contacts' },
-      { title: 'Блог', path: '/blog' },
     ],
   };
 
@@ -50,23 +38,23 @@ const Footer: React.FC = () => {
           {/* Информация о компании */}
           <Grid item xs={12} md={4}>
             <Typography variant="h6" gutterBottom component="div" sx={{ fontWeight: 'bold' }}>
-              СПЕКТР
+              ООО "СПЕКТР"
             </Typography>
             <Typography variant="body2" sx={{ mb: 2 }}>
               Узконаправленная организация, которая работает в нише «Обслуживания коммерческого транспорта»,
               предлагая ассортимент восстановленных ЗМЗ/УМЗ двигателей.
             </Typography>
-            <Typography variant="body2" sx={{ mb: 2 }}>
-              Телефон: +7 (999) 123-45-67
+            <Typography variant="body2" sx={{ mb: 1 }}>
+              ОГРН: 1217400012840
             </Typography>
-            <Typography variant="body2">
-              Email: info@spectr-motors.ru
+            <Typography variant="body2" sx={{ mb: 3 }}>
+              ИНН/КПП: 7456047921/745601001
             </Typography>
           </Grid>
 
           {/* Ссылки */}
           {Object.entries(footerLinks).map(([title, links]) => (
-            <Grid item xs={12} sm={6} md={2} key={title}>
+            <Grid item xs={12} sm={6} md={3} key={title}>
               <Typography variant="h6" gutterBottom fontWeight="bold">
                 {title}
               </Typography>
@@ -81,6 +69,7 @@ const Footer: React.FC = () => {
                       color: 'white',
                       textDecoration: 'none',
                       transition: 'color 0.3s',
+                      mb: 1,
                       '&:hover': { 
                         color: 'secondary.light',
                       }
@@ -93,53 +82,35 @@ const Footer: React.FC = () => {
             </Grid>
           ))}
 
-          {/* Социальные сети */}
-          <Grid item xs={12} sm={12} md={2}>
+          {/* Контакты */}
+          <Grid item xs={12} sm={6} md={3}>
             <Typography variant="h6" gutterBottom fontWeight="bold">
-              Мы в соцсетях
+              Контакты
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <IconButton 
-                aria-label="facebook" 
-                sx={{ 
-                  color: 'white',
-                  transition: 'color 0.3s',
-                  '&:hover': { color: 'secondary.main' } 
-                }}
-              >
-                <FacebookIcon />
-              </IconButton>
-              <IconButton 
-                aria-label="instagram" 
-                sx={{ 
-                  color: 'white',
-                  transition: 'color 0.3s',
-                  '&:hover': { color: 'secondary.main' } 
-                }}
-              >
-                <InstagramIcon />
-              </IconButton>
-              <IconButton 
-                aria-label="youtube" 
-                sx={{ 
-                  color: 'white',
-                  transition: 'color 0.3s',
-                  '&:hover': { color: 'secondary.main' } 
-                }}
-              >
-                <YouTubeIcon />
-              </IconButton>
-              <IconButton 
-                aria-label="twitter" 
-                sx={{ 
-                  color: 'white',
-                  transition: 'color 0.3s',
-                  '&:hover': { color: 'secondary.main' } 
-                }}
-              >
-                <TwitterIcon />
-              </IconButton>
-            </Box>
+            <List dense>
+              <ListItem disableGutters sx={{ mb: 1 }}>
+                <ListItemText primary="8 (800) 123-45-67" />
+              </ListItem>
+              <ListItem disableGutters sx={{ mb: 1 }}>
+                <ListItemText primary="info@spectr-motors.ru" />
+              </ListItem>
+              <ListItem disableGutters sx={{ mb: 1 }}>
+                <ListItemText primary="Московская область, г. Подольск, Проезд авиаторов 12с2" />
+              </ListItem>
+            </List>
+          </Grid>
+
+          {/* Социальные сети */}
+          <Grid item xs={12} sm={6} md={2}>
+            <Typography variant="h6" gutterBottom fontWeight="bold">
+              Мы в сети
+            </Typography>
+            <Typography variant="body2" sx={{ mb: 2 }}>
+              Нас можно найти по запросу через АВИТО:
+              <Box component="span" sx={{ display: 'block', fontWeight: 'bold', mt: 1 }}>
+                "Двигатель змз 406"
+              </Box>
+            </Typography>
           </Grid>
         </Grid>
       </Container>
@@ -147,36 +118,10 @@ const Footer: React.FC = () => {
       <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.1)' }} />
       
       <Container maxWidth="xl">
-        <Box sx={{ py: 3, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'center', sm: 'flex-start' } }}>
-          <Typography variant="body2" sx={{ mb: { xs: 1, sm: 0 } }}>
+        <Box sx={{ py: 3, display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'center', alignItems: { xs: 'center', sm: 'center' } }}>
+          <Typography variant="body2" align="center">
             © {currentYear} ООО "СПЕКТР". Все права защищены.
           </Typography>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Link 
-              component={RouterLink} 
-              to="/privacy" 
-              color="inherit" 
-              underline="hover"
-              sx={{
-                transition: 'color 0.3s',
-                '&:hover': { color: 'secondary.light' }
-              }}
-            >
-              Политика конфиденциальности
-            </Link>
-            <Link 
-              component={RouterLink} 
-              to="/terms" 
-              color="inherit" 
-              underline="hover"
-              sx={{
-                transition: 'color 0.3s',
-                '&:hover': { color: 'secondary.light' }
-              }}
-            >
-              Условия использования
-            </Link>
-          </Box>
         </Box>
       </Container>
     </Box>

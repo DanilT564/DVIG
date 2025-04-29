@@ -3,15 +3,15 @@ import { createTheme } from '@mui/material/styles';
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#0064cd', // Синий цвет, как на референсе
+      main: '#0066cc', // Синий цвет, как на референсе motors774.netlify.app
       light: '#4d8fe0',
       dark: '#004c99',
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#e53935', // Красный цвет для акцентов
-      light: '#ff6f60',
-      dark: '#ab000d',
+      main: '#f44336', // Красный цвет для акцентов
+      light: '#ff7961',
+      dark: '#ba000d',
       contrastText: '#ffffff',
     },
     background: {
@@ -76,7 +76,7 @@ const theme = createTheme({
         },
         containedSecondary: {
           '&:hover': {
-            backgroundColor: '#ab000d',
+            backgroundColor: '#ba000d',
             boxShadow: 'none',
           },
         },
@@ -85,7 +85,7 @@ const theme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: {
-          borderRadius: 4,
+          borderRadius: 8,
           boxShadow: '0 2px 8px rgba(0, 0, 0, 0.05)',
           transition: 'transform 0.2s, box-shadow 0.2s',
           '&:hover': {
@@ -98,7 +98,7 @@ const theme = createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          boxShadow: '0 1px 0 rgba(0, 0, 0, 0.1)',
+          boxShadow: 'none',
         },
       },
     },
@@ -135,6 +135,15 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 4,
+        },
+      },
+    },
+    MuiContainer: {
+      styleOverrides: {
+        root: {
+          '@media (min-width: 1280px)': {
+            maxWidth: 1200,
+          },
         },
       },
     },

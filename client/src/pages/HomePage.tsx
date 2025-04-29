@@ -12,6 +12,8 @@ import {
   Paper,
   useMediaQuery,
   Divider,
+  TextField,
+  FormControl,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import {
@@ -26,30 +28,54 @@ const HomePage: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   // Категории моторов
-  const categories = [
+  const engines = [
     {
-      id: 'zmz',
-      name: 'Двигатели ЗМЗ',
+      id: 'bmw-m54b30',
+      name: 'Двигатель M54B30 BMW для 5 серии',
       image: 'https://images.unsplash.com/photo-1581092921461-7d6ffb54e4c2?auto=format&fit=crop&w=500&q=60',
-      description: 'Восстановленные двигатели ЗМЗ для автомобилей ГАЗ',
+      brand: 'BMW',
+      model: '5 серия',
+      year: '2010',
+      volume: '3 л',
+      power: '231 л.с.',
+      price: '120,000 ₽',
+      available: true,
     },
     {
-      id: 'umz',
-      name: 'Двигатели УМЗ',
+      id: 'toyota-2azfe',
+      name: 'Двигатель 2AZ-FE Toyota для Camry',
       image: 'https://images.unsplash.com/photo-1485045634160-a5bc41221d5f?auto=format&fit=crop&w=500&q=60',
-      description: 'Восстановленные двигатели УМЗ для автомобилей УАЗ',
+      brand: 'Toyota',
+      model: 'Camry',
+      year: '2012',
+      volume: '2.4 л',
+      power: '167 л.с.',
+      price: '95,000 ₽',
+      available: true,
     },
     {
-      id: 'refurbished',
-      name: 'Восстановленные двигатели',
+      id: 'vw-1-6tdi',
+      name: 'Двигатель 1.6 TDI CAYA Volkswagen для Golf',
       image: 'https://images.unsplash.com/photo-1519752594763-2633e2e0a50a?auto=format&fit=crop&w=500&q=60',
-      description: 'Полностью восстановленные двигатели с гарантией',
+      brand: 'Volkswagen',
+      model: 'Golf',
+      year: '2015',
+      volume: '1.6 л',
+      power: '105 л.с.',
+      price: '110,000 ₽',
+      available: true,
     },
     {
-      id: 'parts',
-      name: 'Запчасти для двигателей',
+      id: 'nissan-vq35de',
+      name: 'Двигатель VQ35DE Nissan для Murano',
       image: 'https://images.unsplash.com/photo-1581092874345-526dbd3bf440?auto=format&fit=crop&w=500&q=60',
-      description: 'Оригинальные запчасти для двигателей ЗМЗ/УМЗ',
+      brand: 'Nissan',
+      model: 'Murano',
+      year: '2013',
+      volume: '3.5 л',
+      power: '249 л.с.',
+      price: '105,000 ₽',
+      available: true,
     },
   ];
 
@@ -57,22 +83,33 @@ const HomePage: React.FC = () => {
   const advantages = [
     {
       icon: <SettingsIcon fontSize="large" color="primary" />,
-      title: 'Гибкие варианты',
-      description: 'Сдайте старый - получите восстановленный',
+      title: 'ГИБКИЕ ВАРИАНТЫ',
+      description: 'Сдайте старый двигатель - получите восстановленный. Экономьте до 50% стоимости по сравнению с новыми.',
     },
     {
       icon: <ShippingIcon fontSize="large" color="primary" />,
-      title: 'Сокращение времени',
-      description: 'Избегайте простоя, двигатели всегда в наличии',
+      title: 'СОКРАЩЕНИЕ ВРЕМЕНИ',
+      description: 'Избегайте простоя, двигатели всегда в наличии. Сокращаем время простоя вашего автомобиля.',
     },
     {
       icon: <SecurityIcon fontSize="large" color="primary" />,
-      title: 'Под ключ',
-      description: 'Через 24 часа автомобиль уже будет в строю',
+      title: 'ПОД КЛЮЧ',
+      description: 'Через 24 часа автомобиль уже будет в строю. Мы - ваш цех по обслуживанию моторов.',
+    },
+  ];
+
+  // Выгоды
+  const benefits = [
+    {
+      title: 'УДОБСТВО',
+      description: 'Мы - ваш цех по обслуживанию моторов',
     },
     {
-      icon: <SupportIcon fontSize="large" color="primary" />,
-      title: 'Надежность',
+      title: 'ЭКОНОМИЯ ВРЕМЕНИ',
+      description: 'Сокращаем время простоя автомобиля',
+    },
+    {
+      title: 'НАДЕЖНОСТЬ',
       description: 'Предоставляем гарантию на двигатели',
     },
   ];
@@ -87,9 +124,9 @@ const HomePage: React.FC = () => {
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           color: '#fff',
-          mb: 4,
+          mb: 6,
           overflow: 'hidden',
-          height: { xs: 400, md: 500 },
+          height: { xs: 450, md: 550 },
           borderRadius: 0,
         }}
       >
@@ -100,7 +137,7 @@ const HomePage: React.FC = () => {
             bottom: 0,
             right: 0,
             left: 0,
-            backgroundColor: 'rgba(0,0,0,.5)',
+            backgroundColor: 'rgba(0,0,0,.6)',
           }}
         />
         <Container
@@ -121,64 +158,28 @@ const HomePage: React.FC = () => {
             fontWeight="bold"
             sx={{
               fontSize: { xs: '2rem', sm: '3rem', md: '3.75rem' },
-              maxWidth: { sm: '80%', md: '60%' },
+              maxWidth: { sm: '100%', md: '80%' },
             }}
           >
-            Собственная сборка двигателей ЗМЗ/УМЗ
+            Восстановленные двигатели ЗМЗ/УМЗ
           </Typography>
           <Typography
             variant="h5"
             color="inherit"
             paragraph
             sx={{
-              maxWidth: { sm: '80%', md: '50%' },
+              maxWidth: { sm: '100%', md: '60%' },
               mb: 4,
-              fontSize: { xs: '1rem', md: '1.5rem' },
+              fontSize: { xs: '1rem', md: '1.25rem' },
             }}
           >
-            Коммерческое предложение по восстановленным двигателям для организаций с автопарком ГАЗ/УАЗ
+            Собственная сборка двигателей для коммерческого транспорта ГАЗ/УАЗ. Компания "СПЕКТР" - ваш надежный партнер с 2017 года.
           </Typography>
-          <Box sx={{ mt: 2 }}>
-            <Button
-              variant="contained"
-              color="secondary"
-              size="large"
-              component={RouterLink}
-              to="/catalog"
-              sx={{
-                px: 4,
-                py: 1.5,
-                fontWeight: 'bold',
-                mr: 2,
-                display: { xs: 'inline-block', sm: 'inline-block' },
-                mb: { xs: 2, sm: 0 },
-                borderRadius: '50px',
-              }}
-            >
-              Каталог
-            </Button>
-            <Button
-              variant="outlined"
-              color="inherit"
-              component={RouterLink}
-              to="/about"
-              sx={{
-                px: 4,
-                py: 1.5,
-                fontWeight: 'bold',
-                borderColor: 'white',
-                display: { xs: 'inline-block', sm: 'inline-block' },
-                borderRadius: '50px',
-              }}
-            >
-              О компании
-            </Button>
-          </Box>
         </Container>
       </Paper>
 
-      {/* О компании */}
-      <Container sx={{ mb: 6 }}>
+      {/* Преимущества сотрудничества */}
+      <Container sx={{ mb: 8 }}>
         <Typography
           component="h2"
           variant="h4"
@@ -186,88 +187,116 @@ const HomePage: React.FC = () => {
           color="text.primary"
           gutterBottom
           fontWeight="bold"
-          sx={{ mb: 4 }}
+          sx={{ mb: 6 }}
         >
-          О КОМПАНИИ
+          Преимущества сотрудничества
         </Typography>
         <Grid container spacing={4}>
-          <Grid item xs={12} md={6}>
-            <Typography variant="body1" paragraph>
-              — Мы узконаправленная организация, которая работает в нише «Обслуживания коммерческого 
-              транспорта» предлагая ассортимент восстановленных ЗМЗ/УМЗ двигателей.
-            </Typography>
-            <Typography variant="body1" paragraph>
-              — С 2017 года мы успешно занимаемся восстановлением и сборкой двигателей, обретая 
-              репутацию надежного партнера в отрасли. В 2024 году 366 клиентов убедились в этом.
-            </Typography>
-            <Typography variant="body1" paragraph>
-              ООО «Спектр» — это надежный партнер для всех, кто ценит качество, прозрачность и 
-              индивидуальный подход в обслуживании своих автомобилей. Мы всегда готовы предложить 
-              лучшие решения для наших клиентов!
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Box sx={{ backgroundColor: '#f5f5f5', p: 3, borderRadius: 2, boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-              <Typography variant="subtitle1" gutterBottom fontWeight="bold">
-                ООО "СПЕКТР"
-              </Typography>
-              <Typography variant="body2" color="text.secondary" paragraph>
-                ОГРН: 1217400012840<br />
-                ИНН/КПП: 7456047921/745601001<br />
-                Фактический адрес: Московская область, г. Подольск, Проезд авиаторов 12с2
-              </Typography>
-            </Box>
-          </Grid>
+          {advantages.map((advantage, index) => (
+            <Grid item key={index} xs={12} md={4}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  padding: 3,
+                  height: '100%',
+                }}
+              >
+                <Box sx={{ mb: 2, color: 'primary.main' }}>{advantage.icon}</Box>
+                <Typography variant="h5" component="h3" gutterBottom fontWeight="bold">
+                  {advantage.title}
+                </Typography>
+                <Typography variant="body1" color="text.secondary">
+                  {advantage.description}
+                </Typography>
+              </Box>
+            </Grid>
+          ))}
         </Grid>
       </Container>
 
-      {/* Категории */}
-      <Container sx={{ mb: 6 }}>
-        <Typography
-          component="h2"
-          variant="h4"
-          align="center"
-          color="text.primary"
-          gutterBottom
-          fontWeight="bold"
-          sx={{ mb: 4 }}
-        >
-          Наши двигатели
-        </Typography>
+      {/* Популярные двигатели */}
+      <Container sx={{ mb: 8 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+          <Typography
+            component="h2"
+            variant="h4"
+            color="text.primary"
+            fontWeight="bold"
+          >
+            Популярные двигатели
+          </Typography>
+          <Button 
+            component={RouterLink}
+            to="/catalog"
+            color="primary"
+          >
+            Смотреть все
+          </Button>
+        </Box>
         <Grid container spacing={4}>
-          {categories.map((category) => (
-            <Grid item key={category.id} xs={12} sm={6} md={3}>
+          {engines.map((engine) => (
+            <Grid item key={engine.id} xs={12} sm={6} md={3}>
               <Card
                 sx={{
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
-                  transition: 'transform 0.3s, box-shadow 0.3s',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
                   '&:hover': {
-                    transform: 'translateY(-10px)',
-                    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)',
+                    transform: 'translateY(-5px)',
+                    boxShadow: '0 8px 16px rgba(0,0,0,0.15)',
                   },
                 }}
-                component={RouterLink}
-                to={`/catalog?category=${category.id}`}
-                style={{ textDecoration: 'none' }}
               >
                 <CardMedia
                   component="img"
-                  height={180}
-                  image={category.image}
-                  alt={category.name}
+                  height={160}
+                  image={engine.image}
+                  alt={engine.name}
                 />
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5" component="h3" color="primary" fontWeight="500">
-                    {category.name}
+                <CardContent sx={{ flexGrow: 1, p: 2 }}>
+                  <Typography variant="h6" component="h3" color="primary.main" fontWeight="bold">
+                    {engine.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {category.description}
-                  </Typography>
+                  <Box sx={{ my: 1 }}>
+                    <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <span>Марка:</span><span>{engine.brand}</span>
+                    </Typography>
+                    <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <span>Модель:</span><span>{engine.model}</span>
+                    </Typography>
+                    <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <span>Год:</span><span>{engine.year}</span>
+                    </Typography>
+                    <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <span>Объем:</span><span>{engine.volume}</span>
+                    </Typography>
+                    <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
+                      <span>Мощность:</span><span>{engine.power}</span>
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2 }}>
+                    <Typography variant="h6" color="primary.main" fontWeight="bold">
+                      {engine.price}
+                    </Typography>
+                    <Typography variant="body2" sx={{ color: 'success.main' }}>
+                      {engine.available ? 'В наличии' : 'Под заказ'}
+                    </Typography>
+                  </Box>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    component={RouterLink}
+                    to={`/product/${engine.id}`}
+                    sx={{ mt: 2 }}
+                  >
+                    Подробнее
+                  </Button>
                 </CardContent>
               </Card>
             </Grid>
@@ -275,56 +304,8 @@ const HomePage: React.FC = () => {
         </Grid>
       </Container>
 
-      {/* Преимущества сотрудничества */}
-      <Box sx={{ bgcolor: '#f8f9fa', py: 6, borderRadius: { md: '40px 40px 0 0' }, mt: 4 }}>
-        <Container>
-          <Typography
-            component="h2"
-            variant="h4"
-            align="center"
-            color="text.primary"
-            gutterBottom
-            fontWeight="bold"
-            sx={{ mb: 4 }}
-          >
-            Преимущества сотрудничества
-          </Typography>
-          <Grid container spacing={4}>
-            {advantages.map((advantage, index) => (
-              <Grid item key={index} xs={12} sm={6} md={3}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    padding: 3,
-                    backgroundColor: 'white',
-                    borderRadius: '16px',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-                    height: '100%',
-                    transition: 'transform 0.3s',
-                    '&:hover': {
-                      transform: 'translateY(-5px)',
-                    },
-                  }}
-                >
-                  <Box sx={{ mb: 2, backgroundColor: 'rgba(25, 118, 210, 0.1)', p: 2, borderRadius: '50%' }}>{advantage.icon}</Box>
-                  <Typography variant="h6" component="h3" gutterBottom fontWeight="bold">
-                    {advantage.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {advantage.description}
-                  </Typography>
-                </Box>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
-
-      {/* Выгоды для вас */}
-      <Container sx={{ my: 6 }}>
+      {/* О компании */}
+      <Container sx={{ mb: 8 }}>
         <Typography
           component="h2"
           variant="h4"
@@ -334,118 +315,117 @@ const HomePage: React.FC = () => {
           fontWeight="bold"
           sx={{ mb: 4 }}
         >
-          Выгоды для вас
+          О компании
         </Typography>
         <Grid container spacing={4}>
-          <Grid item xs={12} md={4}>
-            <Box sx={{ 
-              p: 4, 
-              textAlign: 'center', 
-              height: '100%', 
-              bgcolor: '#f8f8f8', 
-              borderRadius: '16px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-              transition: 'transform 0.3s',
-              '&:hover': {
-                transform: 'translateY(-5px)',
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-              }
-            }}>
-              <Typography variant="h6" component="h3" gutterBottom fontWeight="bold">
-                УДОБСТВО
-              </Typography>
-              <Typography variant="body1">
-                Мы - ваш цех по обслуживанию моторов
-              </Typography>
+          <Grid item xs={12} md={7}>
+            <Typography variant="body1" paragraph>
+              ООО "СПЕКТР" (ОГРН: 1217400012840, ИНН/КПП: 7456047921/745601001) — узконаправленная организация, которая работает в нише «Обслуживания коммерческого транспорта», предлагая ассортимент восстановленных ЗМЗ/УМЗ двигателей.
+            </Typography>
+            <Typography variant="body1" paragraph>
+              С 2017 года мы успешно занимаемся восстановлением и сборкой двигателей, обретая 
+              репутацию надежного партнера в отрасли. В 2024 году 366 клиентов убедились в этом.
+            </Typography>
+            <Typography variant="body1" paragraph>
+              ООО «Спектр» — это надежный партнер для всех, кто ценит качество, прозрачность и 
+              индивидуальный подход в обслуживании своих автомобилей.
+            </Typography>
+            
+            <Typography variant="h6" gutterBottom fontWeight="bold" sx={{ mt: 4 }}>
+              Выгоды для вас:
+            </Typography>
+            <Box component="ul" sx={{ pl: 3 }}>
+              {benefits.map((benefit, index) => (
+                <Box component="li" key={index} sx={{ mb: 1 }}>
+                  <Typography variant="body1">
+                    <Box component="span" fontWeight="bold">{benefit.title}</Box> - {benefit.description}
+                  </Typography>
+                </Box>
+              ))}
             </Box>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={5}>
+            {/* Контактная форма */}
             <Box sx={{ 
-              p: 4, 
-              textAlign: 'center', 
-              height: '100%', 
-              bgcolor: '#f8f8f8', 
-              borderRadius: '16px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-              transition: 'transform 0.3s',
-              '&:hover': {
-                transform: 'translateY(-5px)',
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-              }
+              bgcolor: 'background.paper', 
+              p: 3, 
+              borderRadius: 2, 
+              boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+              height: '100%'
             }}>
-              <Typography variant="h6" component="h3" gutterBottom fontWeight="bold">
-                ЭКОНОМИЯ ВРЕМЕНИ
+              <Typography variant="h5" gutterBottom fontWeight="bold">
+                Остались вопросы?
               </Typography>
-              <Typography variant="body1">
-                Сокращаем время простоя автомобиля
+              <Typography variant="body2" paragraph>
+                Заполните форму, и наш специалист свяжется с вами в ближайшее время. Мы подберем для вас оптимальный вариант двигателя и ответим на все вопросы.
               </Typography>
-            </Box>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Box sx={{ 
-              p: 4, 
-              textAlign: 'center', 
-              height: '100%', 
-              bgcolor: '#f8f8f8', 
-              borderRadius: '16px',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-              transition: 'transform 0.3s',
-              '&:hover': {
-                transform: 'translateY(-5px)',
-                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
-              }
-            }}>
-              <Typography variant="h6" component="h3" gutterBottom fontWeight="bold">
-                НАДЕЖНОСТЬ
+              
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <Typography variant="body2" gutterBottom>Ваше имя *</Typography>
+                <TextField 
+                  size="small"
+                  variant="outlined"
+                  fullWidth
+                />
+              </FormControl>
+              
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <Typography variant="body2" gutterBottom>Телефон *</Typography>
+                <TextField 
+                  size="small"
+                  variant="outlined"
+                  fullWidth
+                />
+              </FormControl>
+              
+              <FormControl fullWidth sx={{ mb: 2 }}>
+                <Typography variant="body2" gutterBottom>Email</Typography>
+                <TextField 
+                  size="small"
+                  variant="outlined"
+                  fullWidth
+                />
+              </FormControl>
+              
+              <FormControl fullWidth sx={{ mb: 3 }}>
+                <Typography variant="body2" gutterBottom>Сообщение *</Typography>
+                <TextField 
+                  size="small"
+                  variant="outlined"
+                  fullWidth
+                  multiline
+                  rows={4}
+                />
+              </FormControl>
+              
+              <Button 
+                variant="contained" 
+                color="primary" 
+                size="large"
+                fullWidth
+              >
+                Отправить сообщение
+              </Button>
+              
+              <Typography variant="h6" sx={{ mt: 4, mb: 2 }} fontWeight="bold">
+                Или свяжитесь с нами:
               </Typography>
-              <Typography variant="body1">
-                Предоставляем гарантию на двигатели
+              <Typography variant="body2" paragraph>
+                Телефон: 8 (800) 123-45-67
+              </Typography>
+              <Typography variant="body2" paragraph>
+                Email: info@spektr-motors.ru
+              </Typography>
+              <Typography variant="body2">
+                Адрес: Московская область, г. Подольск, Проезд авиаторов 12с2
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 2 }}>
+                Нас можно найти по запросу через АВИТО: "Двигатель змз 406"
               </Typography>
             </Box>
           </Grid>
         </Grid>
       </Container>
-
-      {/* Готовы подобрать идеальный мотор? */}
-      <Box sx={{ 
-        bgcolor: 'primary.main', 
-        color: 'white', 
-        py: 6, 
-        mt: 6,
-        borderRadius: { md: '40px' },
-        mx: { md: 4 },
-        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)'
-      }}>
-        <Container>
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: 'center' }}>
-            <Box sx={{ mb: { xs: 3, md: 0 } }}>
-              <Typography variant="h4" component="h2" gutterBottom fontWeight="bold">
-                Готовы подобрать идеальный двигатель?
-              </Typography>
-              <Typography variant="body1">
-                Наши специалисты помогут вам выбрать оптимальный двигатель под ваши задачи.
-                Широкий выбор, профессиональная консультация и быстрая доставка!
-              </Typography>
-            </Box>
-            <Button 
-              component={RouterLink}
-              to="/catalog"
-              variant="contained" 
-              color="secondary" 
-              size="large"
-              sx={{ 
-                px: 4, 
-                py: 1.5, 
-                fontWeight: 'bold',
-                borderRadius: '50px',
-                '&:hover': { bgcolor: 'secondary.dark' }
-              }}
-            >
-              Перейти в каталог
-            </Button>
-          </Box>
-        </Container>
-      </Box>
     </Box>
   );
 };

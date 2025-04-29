@@ -8,17 +8,14 @@ const MainLayout: React.FC = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header />
-      <Container 
+      <Box 
         component="main" 
-        maxWidth="xl" 
         sx={{ 
-          flexGrow: 1, 
-          py: 4,
-          px: { xs: 2, sm: 3, md: 4 }
+          flexGrow: 1,
         }}
       >
         <Outlet />
-      </Container>
+      </Box>
       <Footer />
     </Box>
   );
