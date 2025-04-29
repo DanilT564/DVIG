@@ -44,6 +44,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const token = localStorage.getItem('token');
     if (token) {
       try {
+        // Проверка для тестового токена админа
+        if (token === 'admin-mock-token-123456') {
+          setUser({
+            _id: 'admin123',
+            name: 'Admin User',
+            email: 'admin@example.com',
+            isAdmin: true,
+          });
+          setLoading(false);
+          return;
+        }
+        
+        // Для обычных токенов проверяем JWT
         const decoded = jwt_decode<DecodedToken>(token);
         const currentTime = Date.now() / 1000;
         
@@ -75,6 +88,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
     
     try {
+      // Добавляем проверку для админа без обращения к серверу
+      if (email === 'admin@example.com' && password === '123456') {
+        // Мок данных для админа
+        const adminUser = {
+          _id: 'admin123',
+          name: 'Admin User',
+          email: 'admin@example.com',
+          isAdmin: true,
+        };
+        
+        // Имитируем ответ от сервера (используем мок-токен)
+        const mockToken = 'admin-mock-token-123456';
+        localStorage.setItem('token', mockToken);
+        setUser(adminUser);
+        
+        // Перенаправляем на главную страницу
+        navigate('/');
+        return;
+      }
+      
+      // Для остальных пользователей пробуем обратиться к серверу
       const response = await fetch(`${process.env.REACT_APP_API_URL || 'http://localhost:5000/api'}/auth/login`, {
         method: 'POST',
         headers: {
