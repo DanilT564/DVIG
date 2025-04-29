@@ -14,7 +14,7 @@ import {
   Stack,
 } from '@mui/material';
 import { ShoppingCart as ShoppingCartIcon } from '@mui/icons-material';
-import { useCart } from '../../hooks/useCart';
+import { useCart } from '../../contexts/CartContext';
 import { Motor } from '../../services/api';
 
 interface ProductCardProps {
@@ -28,11 +28,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
     e.preventDefault();
     e.stopPropagation();
     addToCart({
-      _id: product._id,
+      id: product._id,
       name: product.name,
-      image: product.images[0] || '/placeholder.jpg',
-      price: product.price,
-      countInStock: product.countInStock
+      imageUrl: product.images[0] || '/placeholder.jpg',
+      price: product.price
     }, 1);
   };
 

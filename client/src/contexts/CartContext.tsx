@@ -1,15 +1,14 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// Типы для товаров в корзине
-interface Product {
-  _id: string;
+// Types
+export interface Product {
+  id: string;
   name: string;
-  image: string;
   price: number;
-  countInStock: number;
+  imageUrl: string;
 }
 
-interface CartItem {
+export interface CartItem {
   product: Product;
   quantity: number;
 }
@@ -39,7 +38,7 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [total, setTotal] = useState(0);
   const [totalItems, setTotalItems] = useState(0);
 
-  // Загрузка корзины из localStorage при инициализации
+  // Load cart from localStorage on initialization
   useEffect(() => {
     const savedCart = localStorage.getItem('cart');
     if (savedCart) {
@@ -47,16 +46,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const parsedCart = JSON.parse(savedCart);
         setCart(parsedCart);
       } catch (error) {
-        console.error('Ошибка при загрузке корзины:', error);
+        console.error('Error loading cart from localStorage:', error);
       }
     }
   }, []);
 
-  // Сохранение корзины в localStorage при изменении
+  // Save cart to localStorage when changed
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
     
-    // Пересчитываем общую сумму и количество товаров
+    // Recalculate total price and quantity
     const newTotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
     const newTotalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     
@@ -64,68 +63,57 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setTotalItems(newTotalItems);
   }, [cart]);
 
-  // Добавление товара в корзину
-  const addToCart = (product: Product, quantity: number) => {
+  // Add product to cart
+  const addToCart = (product: Product, quantity: number = 1) => {
     setCart(prevCart => {
-      // Проверяем, есть ли уже такой товар в корзине
-      const existingItemIndex = prevCart.findIndex(item => item.product._id === product._id);
+      const existingItemIndex = prevCart.findIndex(item => item.product.id === product.id);
       
-      if (existingItemIndex !== -1) {
-        // Товар уже есть в корзине, обновляем количество
+      if (existingItemIndex >= 0) {
+        // Product already in cart, update quantity
         const updatedCart = [...prevCart];
-        const newQuantity = updatedCart[existingItemIndex].quantity + quantity;
-        
-        // Проверяем, не превышает ли новое количество доступное на складе
-        updatedCart[existingItemIndex].quantity = Math.min(newQuantity, product.countInStock);
-        
+        updatedCart[existingItemIndex].quantity += quantity;
         return updatedCart;
       } else {
-        // Товара нет в корзине, добавляем новый
-        return [...prevCart, { product, quantity: Math.min(quantity, product.countInStock) }];
+        // Add new product to cart
+        return [...prevCart, { product, quantity }];
       }
     });
   };
 
-  // Удаление товара из корзины
+  // Remove product from cart
   const removeFromCart = (productId: string) => {
-    setCart(prevCart => prevCart.filter(item => item.product._id !== productId));
+    setCart(prevCart => prevCart.filter(item => item.product.id !== productId));
   };
 
-  // Обновление количества товара в корзине
+  // Update product quantity
   const updateQuantity = (productId: string, quantity: number) => {
-    if (quantity <= 0) {
-      removeFromCart(productId);
-      return;
-    }
-    
-    setCart(prevCart => {
-      return prevCart.map(item => {
-        if (item.product._id === productId) {
-          // Проверяем, не превышает ли новое количество доступное на складе
-          const newQuantity = Math.min(quantity, item.product.countInStock);
-          return { ...item, quantity: newQuantity };
-        }
-        return item;
-      });
-    });
+    setCart(prevCart => 
+      prevCart.map(item => 
+        item.product.id === productId 
+          ? { ...item, quantity: Math.max(1, quantity) }
+          : item
+      )
+    );
   };
 
-  // Очистка корзины
+  // Clear cart
   const clearCart = () => {
     setCart([]);
   };
 
-  const value = {
-    cart,
-    addToCart,
-    removeFromCart,
-    updateQuantity,
-    clearCart,
-    total,
-    totalItems,
-  };
-
-  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
+  return (
+    <CartContext.Provider value={{
+      cart,
+      addToCart,
+      removeFromCart,
+      updateQuantity,
+      clearCart,
+      total,
+      totalItems
+    }}>
+      {children}
+    </CartContext.Provider>
+  );
 };
 
-export default CartContext; 
+export default CartProvider; 

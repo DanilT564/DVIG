@@ -1,7 +1,9 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
 import { Container, Box } from '@mui/material';
-import { useAuth } from './hooks/useAuth';
+import { useAuth } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
+import CartProvider from './contexts/CartContext';
 
 // Layouts
 import MainLayout from './components/layouts/MainLayout';
@@ -24,7 +26,7 @@ import AdminProducts from './pages/admin/AdminProducts';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminUsers from './pages/admin/AdminUsers';
 
-// Компонент для защищенных маршрутов
+// Protected route component
 interface ProtectedRouteProps {
   element: React.ReactNode;
   adminRequired?: boolean;
@@ -33,11 +35,11 @@ interface ProtectedRouteProps {
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element, adminRequired = false }) => {
   const { isAuthenticated, isAdmin, loading } = useAuth();
   
-  // Проверка на админа напрямую из localStorage
+  // Check for admin directly from localStorage
   const localIsAdmin = localStorage.getItem('isAdmin') === 'true';
 
   if (loading) {
-    return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>Загрузка...</Box>;
+    return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>Loading...</Box>;
   }
 
   if (!isAuthenticated && !localIsAdmin) {
@@ -51,10 +53,10 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element, adminRequired 
   return <>{element}</>;
 };
 
-const App: React.FC = () => {
+const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      {/* Публичные маршруты */}
+      {/* Public routes */}
       <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
         <Route path="catalog" element={<CatalogPage />} />
@@ -63,13 +65,13 @@ const App: React.FC = () => {
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         
-        {/* Защищенные маршруты для пользователей */}
+        {/* Protected user routes */}
         <Route path="checkout" element={<ProtectedRoute element={<CheckoutPage />} />} />
         <Route path="profile" element={<ProtectedRoute element={<ProfilePage />} />} />
         <Route path="orders" element={<ProtectedRoute element={<OrdersPage />} />} />
       </Route>
       
-      {/* Маршруты администратора */}
+      {/* Admin routes */}
       <Route path="/admin" element={<ProtectedRoute element={<AdminLayout />} adminRequired={true} />}>
         <Route index element={<AdminDashboard />} />
         <Route path="products" element={<AdminProducts />} />
@@ -77,9 +79,21 @@ const App: React.FC = () => {
         <Route path="users" element={<AdminUsers />} />
       </Route>
       
-      {/* Страница не найдена */}
+      {/* Not found page */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <CartProvider>
+          <AppRoutes />
+        </CartProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 };
 

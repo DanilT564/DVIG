@@ -16,6 +16,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  ListItemIcon,
   Divider,
   Avatar,
 } from '@mui/material';
@@ -26,9 +27,19 @@ import {
   Search as SearchIcon,
   Menu as MenuIcon,
   Phone as PhoneIcon,
+  Home as HomeIcon,
+  Category as CategoryIcon,
+  Info as InfoIcon,
+  ContactPhone as ContactPhoneIcon,
+  Person as PersonIcon,
+  ShoppingBag as ShoppingBagIcon,
+  AdminPanelSettings as AdminIcon,
+  Logout as LogoutIcon,
+  Login as LoginIcon,
+  PersonAdd as PersonAddIcon,
 } from '@mui/icons-material';
-import { useAuth } from '../../hooks/useAuth';
-import { useCart } from '../../hooks/useCart';
+import { useAuth } from '../../contexts/AuthContext';
+import { useCart } from '../../contexts/CartContext';
 import SearchBar from './SearchBar';
 
 const Header: React.FC = () => {
@@ -74,63 +85,128 @@ const Header: React.FC = () => {
   };
 
   const menuItems = [
-    { title: 'Главная', path: '/' },
-    { title: 'Каталог', path: '/catalog' },
-    { title: 'О нас', path: '/about' },
-    { title: 'Контакты', path: '/contacts' },
+    { title: 'Главная', path: '/', icon: <HomeIcon /> },
+    { title: 'Каталог', path: '/catalog', icon: <CategoryIcon /> },
+    { title: 'О нас', path: '/about', icon: <InfoIcon /> },
+    { title: 'Контакты', path: '/contacts', icon: <ContactPhoneIcon /> },
   ];
 
   const mobileMenuDrawer = (
     <Box
-      sx={{ width: 250 }}
+      sx={{ 
+        width: 280,
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
       role="presentation"
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
     >
-      <Box sx={{ p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
+      <Box sx={{ 
+        p: 3, 
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center', 
+        bgcolor: 'primary.main',
+        color: 'white'
+      }}>
+        <Typography variant="h6" component="div" sx={{ fontWeight: 'bold', textAlign: 'center' }}>
           МоторПрайм
         </Typography>
       </Box>
-      <Divider />
-      <List>
+      
+      <List sx={{ flexGrow: 1, py: 1 }}>
         {menuItems.map((item) => (
           <ListItem 
             button 
             component={RouterLink} 
             to={item.path} 
             key={item.title}
+            sx={{ py: 1.5 }}
           >
-            <ListItemText primary={item.title} />
+            <ListItemIcon sx={{ minWidth: 40, color: 'primary.main' }}>
+              {item.icon}
+            </ListItemIcon>
+            <ListItemText 
+              primary={item.title} 
+              primaryTypographyProps={{ fontWeight: 500 }}
+            />
           </ListItem>
         ))}
       </List>
+      
       <Divider />
-      <List>
+      
+      <Box sx={{ p: 2, bgcolor: 'grey.100' }}>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+          8 (800) 123-45-67
+        </Typography>
+      </Box>
+      
+      <Divider />
+      
+      <List sx={{ py: 0 }}>
         {isAuthenticated ? (
           <>
-            <ListItem button component={RouterLink} to="/profile">
-              <ListItemText primary="Профиль" />
+            <ListItem button component={RouterLink} to="/profile" sx={{ py: 1.5 }}>
+              <ListItemIcon sx={{ minWidth: 40, color: 'primary.main' }}>
+                <PersonIcon />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Профиль" 
+                primaryTypographyProps={{ fontWeight: 500 }} 
+              />
             </ListItem>
-            <ListItem button component={RouterLink} to="/orders">
-              <ListItemText primary="Мои заказы" />
+            <ListItem button component={RouterLink} to="/orders" sx={{ py: 1.5 }}>
+              <ListItemIcon sx={{ minWidth: 40, color: 'primary.main' }}>
+                <ShoppingBagIcon />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Мои заказы" 
+                primaryTypographyProps={{ fontWeight: 500 }} 
+              />
             </ListItem>
             {isAdmin && (
-              <ListItem button component={RouterLink} to="/admin">
-                <ListItemText primary="Админ-панель" />
+              <ListItem button component={RouterLink} to="/admin" sx={{ py: 1.5 }}>
+                <ListItemIcon sx={{ minWidth: 40, color: 'primary.main' }}>
+                  <AdminIcon />
+                </ListItemIcon>
+                <ListItemText 
+                  primary="Админ-панель" 
+                  primaryTypographyProps={{ fontWeight: 500 }} 
+                />
               </ListItem>
             )}
-            <ListItem button onClick={handleLogout}>
-              <ListItemText primary="Выйти" />
+            <ListItem button onClick={handleLogout} sx={{ py: 1.5 }}>
+              <ListItemIcon sx={{ minWidth: 40, color: 'primary.main' }}>
+                <LogoutIcon />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Выйти" 
+                primaryTypographyProps={{ fontWeight: 500 }} 
+              />
             </ListItem>
           </>
         ) : (
           <>
-            <ListItem button component={RouterLink} to="/login">
-              <ListItemText primary="Войти" />
+            <ListItem button component={RouterLink} to="/login" sx={{ py: 1.5 }}>
+              <ListItemIcon sx={{ minWidth: 40, color: 'primary.main' }}>
+                <LoginIcon />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Войти" 
+                primaryTypographyProps={{ fontWeight: 500 }} 
+              />
             </ListItem>
-            <ListItem button component={RouterLink} to="/register">
-              <ListItemText primary="Регистрация" />
+            <ListItem button component={RouterLink} to="/register" sx={{ py: 1.5 }}>
+              <ListItemIcon sx={{ minWidth: 40, color: 'primary.main' }}>
+                <PersonAddIcon />
+              </ListItemIcon>
+              <ListItemText 
+                primary="Регистрация" 
+                primaryTypographyProps={{ fontWeight: 500 }} 
+              />
             </ListItem>
           </>
         )}
@@ -140,38 +216,44 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <AppBar position="sticky" sx={{ bgcolor: '#0066cc', zIndex: 1300, boxShadow: 'none' }}>
+      <AppBar position="sticky" sx={{ bgcolor: 'primary.main', boxShadow: (theme) => theme.shadows[1] }}>
         <Container maxWidth="xl">
-          <Toolbar disableGutters sx={{ minHeight: '64px' }}>
+          <Toolbar disableGutters sx={{ px: { xs: 0, sm: 2 }, minHeight: { xs: '56px', sm: '64px' } }}>
             {isMobile && (
               <IconButton
-                size="large"
-                edge="start"
                 color="inherit"
-                aria-label="menu"
-                sx={{ mr: 1 }}
+                aria-label="Открыть меню"
                 onClick={handleMobileMenuToggle}
+                sx={{ mr: 1 }}
               >
                 <MenuIcon />
               </IconButton>
             )}
 
-            <Typography
-              variant="h6"
-              noWrap
+            <Box
               component={RouterLink}
               to="/"
               sx={{
-                mr: 2,
-                display: { xs: 'flex' },
-                fontWeight: 700,
-                color: 'white',
+                display: 'flex',
+                alignItems: 'center',
                 textDecoration: 'none',
-                flexGrow: { xs: 1, md: 0 },
+                color: 'inherit',
+                mr: { xs: 1, md: 4 },
               }}
             >
-              МоторПрайм
-            </Typography>
+              <Typography
+                variant="h6"
+                noWrap
+                sx={{
+                  fontWeight: 700,
+                  letterSpacing: '.03rem',
+                  color: 'white',
+                  fontSize: { xs: '1.1rem', md: '1.25rem' },
+                }}
+              >
+                МоторПрайм
+              </Typography>
+            </Box>
 
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {menuItems.map((item) => (
@@ -182,10 +264,13 @@ const Header: React.FC = () => {
                   sx={{ 
                     my: 2, 
                     color: 'white', 
-                    display: 'block',
                     mx: 1,
+                    py: 1,
+                    px: 2,
+                    fontWeight: 500,
+                    fontSize: '0.95rem',
                     '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                      bgcolor: 'rgba(255, 255, 255, 0.1)',
                     }
                   }}
                 >
@@ -195,43 +280,53 @@ const Header: React.FC = () => {
             </Box>
 
             {/* Телефон для десктопа */}
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', mr: 2 }}>
-              <PhoneIcon sx={{ mr: 1 }} />
-              <Typography variant="body1" component="span" fontWeight="500">
+            <Box 
+              sx={{ 
+                display: { xs: 'none', md: 'flex' }, 
+                alignItems: 'center', 
+                mr: 3,
+                px: 2,
+                py: 0.5,
+                borderRadius: 1,
+                bgcolor: 'rgba(255, 255, 255, 0.1)',
+              }}
+            >
+              <PhoneIcon fontSize="small" sx={{ mr: 1 }} />
+              <Typography variant="body2" fontWeight="500" whiteSpace="nowrap">
                 8 (800) 123-45-67
               </Typography>
             </Box>
 
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <IconButton
-                size="large"
-                aria-label="search"
                 color="inherit"
+                aria-label="Поиск"
                 onClick={handleSearchToggle}
+                sx={{ mx: 0.5 }}
               >
                 <SearchIcon />
               </IconButton>
 
               <IconButton
-                size="large"
-                aria-label="show cart items"
                 color="inherit"
+                aria-label="Корзина"
                 component={RouterLink}
                 to="/cart"
+                sx={{ mx: 0.5 }}
               >
-                <Badge badgeContent={totalItems} color="secondary">
+                <Badge badgeContent={totalItems} color="secondary" overlap="circular">
                   <ShoppingCartIcon />
                 </Badge>
               </IconButton>
 
               {isAuthenticated ? (
                 <IconButton
-                  size="large"
                   edge="end"
-                  aria-label="account of current user"
+                  aria-label="Аккаунт"
                   aria-haspopup="true"
                   onClick={handleProfileMenuOpen}
                   color="inherit"
+                  sx={{ ml: 0.5 }}
                 >
                   {user?.name ? (
                     <Avatar 
@@ -239,7 +334,7 @@ const Header: React.FC = () => {
                         width: 32, 
                         height: 32,
                         bgcolor: 'secondary.main',
-                        fontSize: '1rem'
+                        fontSize: '0.875rem',
                       }}
                     >
                       {user.name.charAt(0).toUpperCase()}
@@ -253,10 +348,15 @@ const Header: React.FC = () => {
                   color="inherit"
                   component={RouterLink}
                   to="/login"
+                  variant="outlined"
+                  size="small"
                   sx={{ 
-                    display: { xs: 'none', md: 'flex' },
+                    display: { xs: 'none', sm: 'flex' },
+                    ml: 1,
+                    borderColor: 'rgba(255,255,255,0.5)',
                     '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)'
+                      borderColor: 'white',
+                      bgcolor: 'rgba(255,255,255,0.1)',
                     }
                   }}
                 >
@@ -281,20 +381,47 @@ const Header: React.FC = () => {
           vertical: 'top',
           horizontal: 'right',
         }}
+        PaperProps={{
+          elevation: 2,
+          sx: { minWidth: 200, mt: 1 }
+        }}
       >
+        <Box sx={{ py: 1, px: 2, bgcolor: 'grey.100' }}>
+          <Typography variant="subtitle2" color="text.primary">
+            {user?.name || 'Пользователь'}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {user?.email || ''}
+          </Typography>
+        </Box>
+        <Divider />
         <MenuItem component={RouterLink} to="/profile" onClick={handleMenuClose}>
-          Профиль
+          <ListItemIcon>
+            <PersonIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Профиль" />
         </MenuItem>
         <MenuItem component={RouterLink} to="/orders" onClick={handleMenuClose}>
-          Мои заказы
+          <ListItemIcon>
+            <ShoppingBagIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Мои заказы" />
         </MenuItem>
         {isAdmin && (
           <MenuItem component={RouterLink} to="/admin" onClick={handleMenuClose}>
-            Админ-панель
+            <ListItemIcon>
+              <AdminIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary="Админ-панель" />
           </MenuItem>
         )}
         <Divider />
-        <MenuItem onClick={handleLogout}>Выйти</MenuItem>
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon>
+            <LogoutIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText primary="Выйти" />
+        </MenuItem>
       </Menu>
 
       {/* Мобильное меню */}
@@ -308,7 +435,16 @@ const Header: React.FC = () => {
 
       {/* Строка поиска */}
       {searchOpen && (
-        <Box sx={{ width: '100%', padding: '1rem', bgcolor: 'background.paper', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+        <Box 
+          sx={{ 
+            width: '100%', 
+            padding: { xs: '1rem', md: '1.5rem' }, 
+            bgcolor: 'background.paper', 
+            boxShadow: (theme) => theme.shadows[3],
+            position: 'absolute',
+            zIndex: 1200,
+          }}
+        >
           <SearchBar onClose={handleSearchToggle} />
         </Box>
       )}

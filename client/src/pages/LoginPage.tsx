@@ -19,7 +19,7 @@ import {
   VisibilityOff as VisibilityOffIcon,
   Login as LoginIcon,
 } from '@mui/icons-material';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../contexts/AuthContext';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');

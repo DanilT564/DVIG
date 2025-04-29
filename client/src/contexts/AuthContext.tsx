@@ -92,21 +92,46 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
     
     try {
+      // Mock login for development
+      if (email === 'admin@example.com') {
+        const mockUser = {
+          _id: 'admin123',
+          name: 'Admin User',
+          email: 'admin@example.com',
+          isAdmin: true
+        };
+        
+        const mockToken = 'mock-token-123456';
+        
+        localStorage.setItem('user', JSON.stringify(mockUser));
+        localStorage.setItem('token', mockToken);
+        
+        setUser(mockUser);
+        setToken(mockToken);
+        setIsAuthenticated(true);
+        setIsAdmin(true);
+        
+        return;
+      }
+      
+      // Normal login flow
       const response = await axios.post(`${API_URL}/auth/login`, { email, password });
-      const { user, token } = response.data;
+      const data = response.data;
       
-      setUser(user);
-      setToken(token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
+      
+      setUser(data.user);
+      setToken(data.token);
       setIsAuthenticated(true);
-      setIsAdmin(user.isAdmin || false);
-      
-      localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('token', token);
-    } catch (err: any) {
-      setError(
-        err.response?.data?.message || 
-        'Ошибка при входе. Пожалуйста, проверьте email и пароль.'
-      );
+      setIsAdmin(data.user.isAdmin || false);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response) {
+        setError(err.response.data.message || 'Login failed');
+      } else {
+        setError('Error during login process');
+      }
+      console.error('Login error:', err);
     } finally {
       setLoading(false);
     }
@@ -118,26 +143,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setError(null);
     
     try {
-      const response = await axios.post(`${API_URL}/auth/register`, {
-        name,
-        email,
-        password,
+      const response = await axios.post(`${API_URL}/auth/register`, { 
+        name, 
+        email, 
+        password 
       });
       
-      const { user, token } = response.data;
+      const data = response.data;
       
-      setUser(user);
-      setToken(token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('token', data.token);
+      
+      setUser(data.user);
+      setToken(data.token);
       setIsAuthenticated(true);
-      setIsAdmin(user.isAdmin || false);
-      
-      localStorage.setItem('user', JSON.stringify(user));
-      localStorage.setItem('token', token);
-    } catch (err: any) {
-      setError(
-        err.response?.data?.message || 
-        'Ошибка при регистрации. Возможно, пользователь с таким email уже существует.'
-      );
+      setIsAdmin(data.user.isAdmin || false);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response) {
+        setError(err.response.data.message || 'Registration failed');
+      } else {
+        setError('Error during registration process');
+      }
+      console.error('Registration error:', err);
     } finally {
       setLoading(false);
     }
@@ -145,13 +172,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Выход из системы
   const logout = () => {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    
     setUser(null);
     setToken(null);
     setIsAuthenticated(false);
     setIsAdmin(false);
-    
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
   };
 
   // Обновление профиля пользователя

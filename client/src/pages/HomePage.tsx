@@ -178,7 +178,7 @@ const HomePage: React.FC = () => {
         </Container>
       </Paper>
 
-      {/* Преимущества сотрудничества */}
+      {/* Преимущества */}
       <Container sx={{ mb: 8 }}>
         <Typography
           component="h2"
@@ -387,77 +387,18 @@ const HomePage: React.FC = () => {
                 />
               </FormControl>
               
-              <FormControl fullWidth sx={{ mb: 3 }}>
-                <Typography variant="body2" gutterBottom>Сообщение *</Typography>
-                <TextField 
-                  size="small"
-                  variant="outlined"
-                  fullWidth
-                  multiline
-                  rows={4}
-                />
-              </FormControl>
-              
               <Button 
                 variant="contained" 
                 color="primary" 
-                size="large"
                 fullWidth
+                sx={{ mt: 2 }}
               >
-                Отправить сообщение
+                Отправить заявку
               </Button>
-              
-              <Typography variant="h6" sx={{ mt: 4, mb: 2 }} fontWeight="bold">
-                Или свяжитесь с нами:
-              </Typography>
-              <Typography variant="body2" paragraph>
-                Телефон: 8 (800) 123-45-67
-              </Typography>
-              <Typography variant="body2" paragraph>
-                Email: info@spektr-motors.ru
-              </Typography>
-              <Typography variant="body2">
-                Адрес: Московская область, г. Подольск, Проезд авиаторов 12с2
-              </Typography>
-              <Typography variant="body2" sx={{ mt: 2 }}>
-                Нас можно найти по запросу через АВИТО: "Двигатель змз 406"
-              </Typography>
             </Box>
           </Grid>
         </Grid>
       </Container>
-      
-      {/* Блок "Готовы подобрать идеальный двигатель" */}
-      <Box sx={{ bgcolor: 'primary.main', color: 'white', py: 4, mb: 4 }}>
-        <Container>
-          <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: 'center' }}>
-            <Box sx={{ mb: { xs: 3, md: 0 }, maxWidth: { xs: '100%', md: '60%' } }}>
-              <Typography variant="h4" component="h2" gutterBottom fontWeight="bold">
-                Готовы подобрать идеальный двигатель?
-              </Typography>
-              <Typography variant="body1">
-                Наши специалисты помогут вам выбрать оптимальный двигатель под ваши задачи.
-                Широкий выбор, профессиональная консультация и быстрая доставка!
-              </Typography>
-            </Box>
-            <Button 
-              component={RouterLink}
-              to="/catalog"
-              variant="contained" 
-              color="secondary" 
-              size="large"
-              sx={{ 
-                px: 4, 
-                py: 1.5, 
-                fontWeight: 'bold',
-                fontSize: '1.1rem'
-              }}
-            >
-              Перейти в каталог
-            </Button>
-          </Box>
-        </Container>
-      </Box>
     </Box>
   );
 };

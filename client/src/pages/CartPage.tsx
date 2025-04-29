@@ -26,8 +26,8 @@ import {
   NavigateNext as NavigateNextIcon,
   ShoppingCart as ShoppingCartIcon,
 } from '@mui/icons-material';
-import { useCart } from '../hooks/useCart';
-import { useAuth } from '../hooks/useAuth';
+import { useCart } from '../contexts/CartContext';
+import { useAuth } from '../contexts/AuthContext';
 
 const CartPage: React.FC = () => {
   const { cart, total, totalItems, removeFromCart, updateQuantity, clearCart } = useCart();
@@ -122,13 +122,13 @@ const CartPage: React.FC = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {cart.map((item: any) => (
-                      <TableRow key={item.product._id}>
+                    {cart.map((item) => (
+                      <TableRow key={item.product.id}>
                         <TableCell>
                           <Box sx={{ display: 'flex', alignItems: 'center' }}>
                             <Box
                               component="img"
-                              src={item.product.image || '/placeholder.jpg'}
+                              src={item.product.imageUrl || '/placeholder.jpg'}
                               alt={item.product.name}
                               sx={{
                                 width: 70,
@@ -141,7 +141,7 @@ const CartPage: React.FC = () => {
                             />
                             <Link
                               component={RouterLink}
-                              to={`/product/${item.product._id}`}
+                              to={`/product/${item.product.id}`}
                               color="inherit"
                               sx={{ fontWeight: 'bold' }}
                             >
@@ -156,7 +156,7 @@ const CartPage: React.FC = () => {
                           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                             <IconButton
                               size="small"
-                              onClick={() => handleDecreaseQuantity(item.product._id, item.quantity)}
+                              onClick={() => handleDecreaseQuantity(item.product.id, item.quantity)}
                             >
                               <RemoveIcon fontSize="small" />
                             </IconButton>
@@ -164,12 +164,12 @@ const CartPage: React.FC = () => {
                               size="small"
                               inputProps={{ style: { textAlign: 'center' } }}
                               value={item.quantity}
-                              onChange={(e) => handleQuantityChange(item.product._id, e.target.value)}
+                              onChange={(e) => handleQuantityChange(item.product.id, e.target.value)}
                               sx={{ width: 60, mx: 1 }}
                             />
                             <IconButton
                               size="small"
-                              onClick={() => handleIncreaseQuantity(item.product._id, item.quantity)}
+                              onClick={() => handleIncreaseQuantity(item.product.id, item.quantity)}
                             >
                               <AddIcon fontSize="small" />
                             </IconButton>
@@ -183,7 +183,7 @@ const CartPage: React.FC = () => {
                         <TableCell align="right">
                           <IconButton
                             color="error"
-                            onClick={() => removeFromCart(item.product._id)}
+                            onClick={() => removeFromCart(item.product.id)}
                           >
                             <DeleteIcon />
                           </IconButton>

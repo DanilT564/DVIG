@@ -22,7 +22,7 @@ import {
   People as PeopleIcon,
   ExitToApp as ExitToAppIcon,
 } from '@mui/icons-material';
-import { useAuth } from '../../hooks/useAuth';
+import { useAuth } from '../../contexts/AuthContext';
 
 const drawerWidth = 240;
 

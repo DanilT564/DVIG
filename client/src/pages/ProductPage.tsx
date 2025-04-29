@@ -31,8 +31,8 @@ import {
   NavigateNext as NavigateNextIcon,
 } from '@mui/icons-material';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
-import { useAuth } from '../hooks/useAuth';
-import { useCart } from '../hooks/useCart';
+import { useAuth } from '../contexts/AuthContext';
+import { useCart } from '../contexts/CartContext';
 import { motorService } from '../services/api';
 
 interface TabPanelProps {
@@ -118,11 +118,10 @@ const ProductPage: React.FC = () => {
   const handleAddToCart = () => {
     if (motor) {
       addToCart({
-        _id: motor._id,
+        id: motor._id,
         name: motor.name,
         price: motor.price,
-        image: motor.image || motor.images[0] || '/placeholder.jpg',
-        countInStock: motor.countInStock
+        imageUrl: motor.image || motor.images[0] || '/placeholder.jpg'
       }, 1);
       setSnackbarMessage('Товар добавлен в корзину');
       setSnackbarSeverity('success');
