@@ -289,7 +289,7 @@ const Header: React.FC = () => {
           Мои заказы
         </MenuItem>
         {isAdmin && (
-          <MenuItem component={RouterLink} to="/admin/dashboard" onClick={handleMenuClose}>
+          <MenuItem component={RouterLink} to="/admin" onClick={handleMenuClose}>
             Админ-панель
           </MenuItem>
         )}
