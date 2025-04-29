@@ -11,6 +11,7 @@ import {
   Container,
   Paper,
   useMediaQuery,
+  Divider,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import {
@@ -18,6 +19,10 @@ import {
   LocalShipping as ShippingIcon,
   Security as SecurityIcon,
   Support as SupportIcon,
+  Facebook as FacebookIcon,
+  Instagram as InstagramIcon,
+  YouTube as YouTubeIcon,
+  Twitter as TwitterIcon,
 } from '@mui/icons-material';
 
 const HomePage: React.FC = () => {
@@ -89,6 +94,7 @@ const HomePage: React.FC = () => {
           mb: 4,
           overflow: 'hidden',
           height: { xs: 400, md: 500 },
+          borderRadius: 0,
         }}
       >
         <Box
@@ -150,6 +156,7 @@ const HomePage: React.FC = () => {
                 mr: 2,
                 display: { xs: 'inline-block', sm: 'inline-block' },
                 mb: { xs: 2, sm: 0 },
+                borderRadius: '50px',
               }}
             >
               Каталог
@@ -165,6 +172,7 @@ const HomePage: React.FC = () => {
                 fontWeight: 'bold',
                 borderColor: 'white',
                 display: { xs: 'inline-block', sm: 'inline-block' },
+                borderRadius: '50px',
               }}
             >
               О компании
@@ -203,8 +211,8 @@ const HomePage: React.FC = () => {
             </Typography>
           </Grid>
           <Grid item xs={12} md={6}>
-            <Box sx={{ backgroundColor: '#f5f5f5', p: 3, borderRadius: 2 }}>
-              <Typography variant="subtitle1" gutterBottom>
+            <Box sx={{ backgroundColor: '#f5f5f5', p: 3, borderRadius: 2, boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+              <Typography variant="subtitle1" gutterBottom fontWeight="bold">
                 ООО "СПЕКТР"
               </Typography>
               <Typography variant="body2" color="text.secondary" paragraph>
@@ -239,9 +247,12 @@ const HomePage: React.FC = () => {
                   display: 'flex',
                   flexDirection: 'column',
                   transition: 'transform 0.3s, box-shadow 0.3s',
+                  borderRadius: '16px',
+                  overflow: 'hidden',
+                  boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
                   '&:hover': {
                     transform: 'translateY(-10px)',
-                    boxShadow: '0 10px 20px rgba(0, 0, 0, 0.2)',
+                    boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)',
                   },
                 }}
                 component={RouterLink}
@@ -255,7 +266,7 @@ const HomePage: React.FC = () => {
                   alt={category.name}
                 />
                 <CardContent sx={{ flexGrow: 1 }}>
-                  <Typography gutterBottom variant="h5" component="h3" color="primary">
+                  <Typography gutterBottom variant="h5" component="h3" color="primary" fontWeight="500">
                     {category.name}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -269,7 +280,7 @@ const HomePage: React.FC = () => {
       </Container>
 
       {/* Преимущества сотрудничества */}
-      <Box sx={{ bgcolor: 'background.paper', py: 6 }}>
+      <Box sx={{ bgcolor: '#f8f9fa', py: 6, borderRadius: { md: '40px 40px 0 0' }, mt: 4 }}>
         <Container>
           <Typography
             component="h2"
@@ -291,9 +302,18 @@ const HomePage: React.FC = () => {
                     flexDirection: 'column',
                     alignItems: 'center',
                     textAlign: 'center',
+                    padding: 3,
+                    backgroundColor: 'white',
+                    borderRadius: '16px',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+                    height: '100%',
+                    transition: 'transform 0.3s',
+                    '&:hover': {
+                      transform: 'translateY(-5px)',
+                    },
                   }}
                 >
-                  <Box sx={{ mb: 2 }}>{advantage.icon}</Box>
+                  <Box sx={{ mb: 2, backgroundColor: 'rgba(25, 118, 210, 0.1)', p: 2, borderRadius: '50%' }}>{advantage.icon}</Box>
                   <Typography variant="h6" component="h3" gutterBottom fontWeight="bold">
                     {advantage.title}
                   </Typography>
@@ -322,7 +342,19 @@ const HomePage: React.FC = () => {
         </Typography>
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
-            <Box sx={{ p: 3, textAlign: 'center', height: '100%', bgcolor: '#f8f8f8', borderRadius: 2 }}>
+            <Box sx={{ 
+              p: 4, 
+              textAlign: 'center', 
+              height: '100%', 
+              bgcolor: '#f8f8f8', 
+              borderRadius: '16px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+              transition: 'transform 0.3s',
+              '&:hover': {
+                transform: 'translateY(-5px)',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+              }
+            }}>
               <Typography variant="h6" component="h3" gutterBottom fontWeight="bold">
                 УДОБСТВО
               </Typography>
@@ -332,7 +364,19 @@ const HomePage: React.FC = () => {
             </Box>
           </Grid>
           <Grid item xs={12} md={4}>
-            <Box sx={{ p: 3, textAlign: 'center', height: '100%', bgcolor: '#f8f8f8', borderRadius: 2 }}>
+            <Box sx={{ 
+              p: 4, 
+              textAlign: 'center', 
+              height: '100%', 
+              bgcolor: '#f8f8f8', 
+              borderRadius: '16px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+              transition: 'transform 0.3s',
+              '&:hover': {
+                transform: 'translateY(-5px)',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+              }
+            }}>
               <Typography variant="h6" component="h3" gutterBottom fontWeight="bold">
                 ЭКОНОМИЯ ВРЕМЕНИ
               </Typography>
@@ -342,7 +386,19 @@ const HomePage: React.FC = () => {
             </Box>
           </Grid>
           <Grid item xs={12} md={4}>
-            <Box sx={{ p: 3, textAlign: 'center', height: '100%', bgcolor: '#f8f8f8', borderRadius: 2 }}>
+            <Box sx={{ 
+              p: 4, 
+              textAlign: 'center', 
+              height: '100%', 
+              bgcolor: '#f8f8f8', 
+              borderRadius: '16px',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
+              transition: 'transform 0.3s',
+              '&:hover': {
+                transform: 'translateY(-5px)',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+              }
+            }}>
               <Typography variant="h6" component="h3" gutterBottom fontWeight="bold">
                 НАДЕЖНОСТЬ
               </Typography>
@@ -355,7 +411,15 @@ const HomePage: React.FC = () => {
       </Container>
 
       {/* Готовы подобрать идеальный мотор? */}
-      <Box sx={{ bgcolor: 'primary.main', color: 'white', py: 6, mt: 6 }}>
+      <Box sx={{ 
+        bgcolor: 'primary.main', 
+        color: 'white', 
+        py: 6, 
+        mt: 6,
+        borderRadius: { md: '40px' },
+        mx: { md: 4 },
+        boxShadow: '0 10px 30px rgba(0, 0, 0, 0.15)'
+      }}>
         <Container>
           <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', alignItems: 'center' }}>
             <Box sx={{ mb: { xs: 3, md: 0 } }}>
@@ -377,6 +441,7 @@ const HomePage: React.FC = () => {
                 px: 4, 
                 py: 1.5, 
                 fontWeight: 'bold',
+                borderRadius: '50px',
                 '&:hover': { bgcolor: 'secondary.dark' }
               }}
             >
@@ -387,7 +452,7 @@ const HomePage: React.FC = () => {
       </Box>
 
       {/* Футер */}
-      <Box sx={{ bgcolor: '#0a4b8e', color: 'white', py: 6 }}>
+      <Box sx={{ bgcolor: '#0a4b8e', color: 'white', py: 6, mt: 6 }}>
         <Container>
           <Grid container spacing={4}>
             <Grid item xs={12} md={3}>
@@ -412,22 +477,22 @@ const HomePage: React.FC = () => {
               </Typography>
               <Box component="ul" sx={{ m: 0, pl: 0, listStyle: 'none' }}>
                 <Box component="li" sx={{ mb: 1 }}>
-                  <RouterLink to="/about" style={{ color: 'white', textDecoration: 'none' }}>
+                  <RouterLink to="/about" style={{ color: 'white', textDecoration: 'none', transition: '0.3s' }}>
                     О компании
                   </RouterLink>
                 </Box>
                 <Box component="li" sx={{ mb: 1 }}>
-                  <RouterLink to="/delivery" style={{ color: 'white', textDecoration: 'none' }}>
+                  <RouterLink to="/delivery" style={{ color: 'white', textDecoration: 'none', transition: '0.3s' }}>
                     Доставка
                   </RouterLink>
                 </Box>
                 <Box component="li" sx={{ mb: 1 }}>
-                  <RouterLink to="/payment" style={{ color: 'white', textDecoration: 'none' }}>
+                  <RouterLink to="/payment" style={{ color: 'white', textDecoration: 'none', transition: '0.3s' }}>
                     Оплата
                   </RouterLink>
                 </Box>
                 <Box component="li" sx={{ mb: 1 }}>
-                  <RouterLink to="/warranty" style={{ color: 'white', textDecoration: 'none' }}>
+                  <RouterLink to="/warranty" style={{ color: 'white', textDecoration: 'none', transition: '0.3s' }}>
                     Гарантия
                   </RouterLink>
                 </Box>
@@ -440,22 +505,22 @@ const HomePage: React.FC = () => {
               </Typography>
               <Box component="ul" sx={{ m: 0, pl: 0, listStyle: 'none' }}>
                 <Box component="li" sx={{ mb: 1 }}>
-                  <RouterLink to="/catalog" style={{ color: 'white', textDecoration: 'none' }}>
+                  <RouterLink to="/catalog" style={{ color: 'white', textDecoration: 'none', transition: '0.3s' }}>
                     Все двигатели
                   </RouterLink>
                 </Box>
                 <Box component="li" sx={{ mb: 1 }}>
-                  <RouterLink to="/catalog?type=zmz" style={{ color: 'white', textDecoration: 'none' }}>
+                  <RouterLink to="/catalog?type=zmz" style={{ color: 'white', textDecoration: 'none', transition: '0.3s' }}>
                     Двигатели ЗМЗ
                   </RouterLink>
                 </Box>
                 <Box component="li" sx={{ mb: 1 }}>
-                  <RouterLink to="/catalog?type=umz" style={{ color: 'white', textDecoration: 'none' }}>
+                  <RouterLink to="/catalog?type=umz" style={{ color: 'white', textDecoration: 'none', transition: '0.3s' }}>
                     Двигатели УМЗ
                   </RouterLink>
                 </Box>
                 <Box component="li" sx={{ mb: 1 }}>
-                  <RouterLink to="/catalog?type=refurbished" style={{ color: 'white', textDecoration: 'none' }}>
+                  <RouterLink to="/catalog?type=refurbished" style={{ color: 'white', textDecoration: 'none', transition: '0.3s' }}>
                     Восстановленные
                   </RouterLink>
                 </Box>
@@ -468,22 +533,22 @@ const HomePage: React.FC = () => {
               </Typography>
               <Box component="ul" sx={{ m: 0, pl: 0, listStyle: 'none' }}>
                 <Box component="li" sx={{ mb: 1 }}>
-                  <RouterLink to="/account" style={{ color: 'white', textDecoration: 'none' }}>
+                  <RouterLink to="/account" style={{ color: 'white', textDecoration: 'none', transition: '0.3s' }}>
                     Личный кабинет
                   </RouterLink>
                 </Box>
                 <Box component="li" sx={{ mb: 1 }}>
-                  <RouterLink to="/track-order" style={{ color: 'white', textDecoration: 'none' }}>
+                  <RouterLink to="/track-order" style={{ color: 'white', textDecoration: 'none', transition: '0.3s' }}>
                     Отследить заказ
                   </RouterLink>
                 </Box>
                 <Box component="li" sx={{ mb: 1 }}>
-                  <RouterLink to="/contacts" style={{ color: 'white', textDecoration: 'none' }}>
+                  <RouterLink to="/contacts" style={{ color: 'white', textDecoration: 'none', transition: '0.3s' }}>
                     Контакты
                   </RouterLink>
                 </Box>
                 <Box component="li" sx={{ mb: 1 }}>
-                  <RouterLink to="/blog" style={{ color: 'white', textDecoration: 'none' }}>
+                  <RouterLink to="/blog" style={{ color: 'white', textDecoration: 'none', transition: '0.3s' }}>
                     Блог
                   </RouterLink>
                 </Box>
@@ -491,17 +556,51 @@ const HomePage: React.FC = () => {
             </Grid>
           </Grid>
           
-          <Box sx={{ mt: 5, pt: 3, borderTop: '1px solid rgba(255, 255, 255, 0.2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: { xs: 'column', sm: 'row' } }}>
+          <Divider sx={{ my: 4, borderColor: 'rgba(255, 255, 255, 0.1)' }} />
+          
+          <Box sx={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            flexDirection: { xs: 'column', sm: 'row' } 
+          }}>
             <Typography variant="body2" sx={{ mb: { xs: 2, sm: 0 } }}>
               © 2025 ООО "СПЕКТР". Все права защищены.
             </Typography>
-            <Box>
-              <RouterLink to="/privacy" style={{ color: 'white', textDecoration: 'none', marginRight: '1rem' }}>
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              <Box component={RouterLink} to="/privacy" 
+                sx={{
+                  color: 'white', 
+                  textDecoration: 'none',
+                  marginRight: '1rem',
+                  '&:hover': { color: 'secondary.main' },
+                  transition: 'color 0.3s'
+                }}
+              >
                 Политика конфиденциальности
-              </RouterLink>
-              <RouterLink to="/terms" style={{ color: 'white', textDecoration: 'none' }}>
+              </Box>
+              <Box component={RouterLink} to="/terms"
+                sx={{
+                  color: 'white', 
+                  textDecoration: 'none',
+                  '&:hover': { color: 'secondary.main' },
+                  transition: 'color 0.3s'
+                }}
+              >
                 Условия использования
-              </RouterLink>
+              </Box>
+            </Box>
+          </Box>
+          
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+            <Typography variant="h6" sx={{ mr: 2 }}>
+              Мы в соцсетях:
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <FacebookIcon fontSize="medium" sx={{ cursor: 'pointer', '&:hover': { color: 'secondary.main' }, transition: 'color 0.3s' }} />
+              <InstagramIcon fontSize="medium" sx={{ cursor: 'pointer', '&:hover': { color: 'secondary.main' }, transition: 'color 0.3s' }} />
+              <YouTubeIcon fontSize="medium" sx={{ cursor: 'pointer', '&:hover': { color: 'secondary.main' }, transition: 'color 0.3s' }} />
+              <TwitterIcon fontSize="medium" sx={{ cursor: 'pointer', '&:hover': { color: 'secondary.main' }, transition: 'color 0.3s' }} />
             </Box>
           </Box>
         </Container>
