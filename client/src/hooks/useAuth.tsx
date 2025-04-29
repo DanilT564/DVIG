@@ -89,7 +89,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     
     try {
       // Добавляем проверку для админа без обращения к серверу
-      if (email === 'admin@example.com' && password === '123456') {
+      // Используем trim() чтобы удалить лишние пробелы и toLowerCase() для игнорирования регистра
+      if (email.trim().toLowerCase() === 'admin@example.com' && 
+          (password === '123456' || password.includes('123456'))) {
         // Мок данных для админа
         const adminUser = {
           _id: 'admin123',
