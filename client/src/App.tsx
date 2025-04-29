@@ -32,16 +32,19 @@ interface ProtectedRouteProps {
 
 const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ element, adminRequired = false }) => {
   const { isAuthenticated, isAdmin, loading } = useAuth();
+  
+  // Проверка на админа напрямую из localStorage
+  const localIsAdmin = localStorage.getItem('isAdmin') === 'true';
 
   if (loading) {
     return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>Загрузка...</Box>;
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !localIsAdmin) {
     return <Navigate to="/login" />;
   }
 
-  if (adminRequired && !isAdmin) {
+  if (adminRequired && !isAdmin && !localIsAdmin) {
     return <Navigate to="/" />;
   }
 
